@@ -22,6 +22,62 @@ function initMap() {
     console.log(marker);
   });
 
+  //search bar
+  var input = document.getElementById("search");
+  var searchBox = new google.maps.places.SearchBox(input);
+  //makes sure that the search is only limited to the bounds of the map box
+  map.addListener("bounds_changed", function () {
+    searchBox.setBounds(map.getBounds());
+  });
+
+  var markers = [];
+  searchBox.addListener("places_changed", function () {
+    var places = searchBox.getPlaces();
+    //if array is empty dont want to do any other work with places
+    if (places.length === 0) {
+      return;
+    }
+    //takes callback function taking the curernt marker for that iteration and using null to get rid of the map reference
+    markers.forEach(function (marker) {
+      marker.setMap(null);
+    });
+    //re-init to an empty array
+    markers = [];
+
+    var bounds = new google.maps.LatLngBounds();
+    places.forEach(function (place) {
+      if (!place.geometry) {
+        return;
+      }
+      markers.push(
+        new google.maps.Marker({
+          map: map,
+          title: place.name,
+          position: place.geometry.location,
+          // content: "testing",
+          content: `lat: ${place.geometry.location.lat()} <br> lng: ${place.geometry.location.lng()}`,
+        })
+      );
+      console.log("coordinates", place.geometry.location.lat());
+      if (place.geometry.viewport) {
+        bounds.union(place.geometry.viewport);
+      } else {
+        bounds.extend(place.geometry.location);
+      }
+    });
+
+    markers.forEach((marker) => {
+      var infoWindow = new google.maps.InfoWindow({
+        //  content: "lat: " + lat + "<br/>lng: " + lng,
+        content: marker.content,
+      });
+      marker.addListener("click", function () {
+        infoWindow.open(map, marker);
+      });
+    });
+    map.fitBounds(bounds);
+  });
+
   function addMarker(props) {
     console.log("this is props" + props.coords);
     string_coords = String(props.coords);
