@@ -58,6 +58,7 @@ function initMap() {
           content: `lat: ${place.geometry.location.lat()} <br> lng: ${place.geometry.location.lng()}`,
         })
       );
+
       console.log("coordinates", place.geometry.location.lat());
       if (place.geometry.viewport) {
         bounds.union(place.geometry.viewport);
@@ -93,6 +94,7 @@ function initMap() {
     var infoWindow = new google.maps.InfoWindow({
       content: "lat: " + lat + "<br/>lng: " + lng,
     });
+
     marker.addListener("click", function () {
       infoWindow.open(map, marker);
     });

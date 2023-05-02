@@ -1,9 +1,12 @@
   #map {
-      height: 480px;
+      height: 500px;
       width: 100%;
   }
   #search{
     width: 99.25%;
     height: 30%;
   }
-  
+.container{
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+}
