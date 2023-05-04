@@ -11,15 +11,15 @@ function initMap() {
     center: startLatLng,
   };
   const map = new google.maps.Map(document.getElementById("map"), options);
-  var marker = [];
+  var location_info = [];
   index = 0;
   google.maps.event.addListener(map, "click", function (event) {
     addMarker({ coords: event.latLng });
-    marker.push({
+    location_info.push({
       index: [{ lat: event.latLng.lat() }, { lng: event.latLng.lng() }],
     });
     index += 1;
-    console.log(marker);
+    console.log(location_info);
   });
 
   //search bar
@@ -75,6 +75,11 @@ function initMap() {
       marker.addListener("click", function () {
         infoWindow.open(map, marker);
       });
+      location_info.push({
+        index: [{ lat: marker.lat }, { lng: marker.lng }],
+      });
+      index += 1;
+      console.log(location_info);
     });
     map.fitBounds(bounds);
   });
@@ -99,6 +104,65 @@ function initMap() {
       infoWindow.open(map, marker);
     });
   }
+
+  //test
+  var axios = require("axios");
+
+  var config = {
+    method: "get",
+    url: "https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJN1t_tDeuEmsRUsoyG83frY4&fields=name%2Crating%2Cformatted_phone_number&key=AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM",
+    headers: {},
+  };
+
+  axios(config)
+    .then(function (response) {
+      console.log(JSON.stringify(response.data));
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+//geocoder
+/**
+ * @license
+ * Copyright 2019 Google LLC. All Rights Reserved.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+const map = new google.maps.Map(document.getElementById("map"), {
+  zoom: 8,
+  center: { lat: 40.731, lng: -73.997 },
+});
+const geocoder = new google.maps.Geocoder();
+const infowindow = new google.maps.InfoWindow();
+
+document.getElementById("submit").addEventListener("click", () => {
+  geocodeLatLng(geocoder, map, infowindow);
+});
+
+function geocodeLatLng(geocoder, map, infowindow) {
+  const input = document.getElementById("latlng").value;
+  const latlngStr = input.split(",", 2);
+  const latlng = {
+    lat: parseFloat(latlngStr[0]),
+    lng: parseFloat(latlngStr[1]),
+  };
+
+  geocoder
+    .geocode({ location: latlng })
+    .then((response) => {
+      if (response.results[0]) {
+        const marker = new google.maps.Marker({
+          position: latlng,
+          map: map,
+        });
+
+        infowindow.setContent(response.results[0].formatted_address);
+        infowindow.open(map, marker);
+      } else {
+        window.alert("No results found");
+      }
+    })
+    .catch((e) => window.alert("Geocoder failed due to: " + e));
 }
 
 window.initMap = initMap;
