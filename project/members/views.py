@@ -8,3 +8,7 @@ from django.http import HttpResponse
 def members(request):
     template = loader.get_template('myfirst.html') 
     return HttpResponse(template.render())
+
+def login(request):
+    template = loader.get_template('login.html')
+    return HttpResponse(template.render())
