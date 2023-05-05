@@ -3,62 +3,89 @@
   <head>
     <title>WanderWhiz</title>
     <link rel="stylesheet" href="css/homestylesheet.css" />
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap"
+      rel="stylesheet"
+    />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
-    <script src="scripts/script.js" defer></script>
-    <script type="module" src="./index.js"></script>
+    <script src="./scripts/placeTypes.js" defer type="module"></script>
+    <script src="./scripts/maps.js" defer type="module"></script>
+    <script type="module" src="./js/scripts.js"></script>
   </head>
   <body>
-	<header>
-		<div class="header-logo">
-		  <img src="images/WanderWhiz-1_5.png"  alt="Logo" width="160" height="60">
-		</div>
-		<nav>
-		  <ul>
-			<li><a href="home.html">Home</a></li>
-			<li><a href="login.html">Login</a></li>
-			<li><a href="signup.html">Sign Up</a></li>
-		  </ul>
-		</nav>
-	  </header>
-	  <div class="container-heading">
-		<h2>Travel Beyond Boundaries!</h2>
-		<div class="heading-images">
-		  <img src="./images/imgbin_airplane-airline-ticket-travel-icon-png.png" alt="location image with plane" width="100" height="75">
-		  <img src="./images/ce9aek1muee0d0lhd8elh1c8jq.png" alt="location image" width="75" height="75">
-		</div>
-	  </div>
-	  <div class="container">
-		<div class="container-map">
-		  <div class="search-container">
-			<input class="form-control" id="search" type="text" placeholder="Search..." />
-			<button id="clear-button">Clear</button>
-			<button id="select-button">Select</button>
-		  </div>
-		  <div id="map"></div>
-		  <div id="temp"></div>
-		</div>
-		<div class="textbox">
-		  <h2>My Travel List</h2>
-		  <div class="list">
-			<!-- Travel list items will be added here -->
-		  </div>
-		</div>
-	  </div>
-	  <footer>
-		<div class="container-footer">
-		  <div class="footer-links">
-			<a href="#">About Us</a>
-			<a href="#">Contact</a>
-		  </div>
-		  <div class="footer-logo">
-			<img src="images/WanderWhiz-1_5.png"  alt="Logo" width="160" height="60">
-		  </div>
-		</div>
-	  </footer>
-	  
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM&callback=initMap&libraries=places"></script>
+    <header>
+      <div class="header-logo">
+        <img
+          src="images/WanderWhiz-1_5.png"
+          alt="Logo"
+          width="160"
+          height="60"
+        />
+      </div>
+      <nav>
+        <ul>
+          <li><a href="home.html">Home</a></li>
+          <li><a href="login.html">Login</a></li>
+          <li><a href="signup.html">Sign Up</a></li>
+        </ul>
+      </nav>
+    </header>
+    <div class="container-heading">
+      <h2>Travel Beyond Boundaries!</h2>
+      <div class="heading-images">
+        <img
+          src="./images/imgbin_airplane-airline-ticket-travel-icon-png.png"
+          alt="location image with plane"
+          width="100"
+          height="75"
+        />
+        <img
+          src="./images/ce9aek1muee0d0lhd8elh1c8jq.png"
+          alt="location image"
+          width="75"
+          height="75"
+        />
+      </div>
+    </div>
+    <div class="container">
+      <div class="container-map">
+        <div class="search-container">
+          <input
+            class="form-control"
+            id="search"
+            type="text"
+            placeholder="Search..."
+          />
+          <button id="clear-button">Clear</button>
+          <button id="select-button">Select</button>
+        </div>
+        <div id="map"></div>
+        <div id="temp"></div>
+      </div>
+      <div class="textbox">
+        <h2>My Travel List</h2>
+        <div class="list">
+          <!-- Travel list items will be added here -->
+        </div>
+      </div>
+    </div>
+    <footer>
+      <div class="container-footer">
+        <div class="footer-links">
+          <a href="#">About Us</a>
+          <a href="#">Contact</a>
+        </div>
+        <div class="footer-logo">
+          <img
+            src="images/WanderWhiz-1_5.png"
+            alt="Logo"
+            width="160"
+            height="60"
+          />
+        </div>
+      </div>
+    </footer>
   </body>
 </html>

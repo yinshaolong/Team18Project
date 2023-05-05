@@ -1,18 +1,18 @@
+import { RESTAURANTS, TOURIST_ATTRACTIONS, HOTELS } from "./placeTypes.js";
+console.log(RESTAURANTS);
+let places;
+let MARKER_PATH;
+
 function initMap() {
-  const icon_marker = {
-    url: "images/marker.jpg", // url
-    scaledSize: new google.maps.Size(10, 10), // scaled size
-    origin: new google.maps.Point(0, 0), // origin
-    anchor: new google.maps.Point(0, 0), // anchor
-  };
   const startLatLng = { lat: 49.2827, lng: -123.1207 };
   const options = {
     zoom: 8,
     center: startLatLng,
   };
   const map = new google.maps.Map(document.getElementById("map"), options);
+  places = new google.maps.places.PlacesService(map);
   var location_info = [];
-  index = 0;
+  var index = 0;
   google.maps.event.addListener(map, "click", function (event) {
     addMarker({ coords: event.latLng });
     location_info.push({
@@ -32,7 +32,7 @@ function initMap() {
 
   var markers = [];
   searchBox.addListener("places_changed", function () {
-    var places = searchBox.getPlaces();
+    let places = searchBox.getPlaces();
     //if array is empty dont want to do any other work with places
     if (places.length === 0) {
       return;
@@ -104,65 +104,79 @@ function initMap() {
       infoWindow.open(map, marker);
     });
   }
+  //credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
+  function showInfoWindow() {
+    // @ts-ignore
+    const marker = this;
 
-  //test
-  var axios = require("axios");
+    places.getDetails(
+      { placeId: marker.placeResult.place_id },
+      (place, status) => {
+        if (status !== google.maps.places.PlacesServiceStatus.OK) {
+          return;
+        }
 
-  var config = {
-    method: "get",
-    url: "https://maps.googleapis.com/maps/api/place/details/json?place_id=ChIJN1t_tDeuEmsRUsoyG83frY4&fields=name%2Crating%2Cformatted_phone_number&key=AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM",
-    headers: {},
-  };
-
-  axios(config)
-    .then(function (response) {
-      console.log(JSON.stringify(response.data));
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-}
-//geocoder
-/**
- * @license
- * Copyright 2019 Google LLC. All Rights Reserved.
- * SPDX-License-Identifier: Apache-2.0
- */
-const map = new google.maps.Map(document.getElementById("map"), {
-  zoom: 8,
-  center: { lat: 40.731, lng: -73.997 },
-});
-const geocoder = new google.maps.Geocoder();
-const infowindow = new google.maps.InfoWindow();
-
-document.getElementById("submit").addEventListener("click", () => {
-  geocodeLatLng(geocoder, map, infowindow);
-});
-
-function geocodeLatLng(geocoder, map, infowindow) {
-  const input = document.getElementById("latlng").value;
-  const latlngStr = input.split(",", 2);
-  const latlng = {
-    lat: parseFloat(latlngStr[0]),
-    lng: parseFloat(latlngStr[1]),
-  };
-
-  geocoder
-    .geocode({ location: latlng })
-    .then((response) => {
-      if (response.results[0]) {
-        const marker = new google.maps.Marker({
-          position: latlng,
-          map: map,
-        });
-
-        infowindow.setContent(response.results[0].formatted_address);
-        infowindow.open(map, marker);
-      } else {
-        window.alert("No results found");
+        infoWindow.open(map, marker);
+        buildIWContent(place);
       }
-    })
-    .catch((e) => window.alert("Geocoder failed due to: " + e));
+    );
+  }
+
+  function dropMarker(i) {
+    return function () {
+      markers[i].setMap(map);
+    };
+  }
+
+  function clearMarkers() {
+    for (let i = 0; i < markers.length; i++) {
+      if (markers[i]) {
+        markers[i].setMap(null);
+      }
+    }
+
+    markers = [];
+  }
+
+  function search(type) {
+    console.log("in search");
+    const search = {
+      bounds: map.getBounds(),
+      types: [type],
+    };
+    places.nearbySearch(search, (results, status, pagniation) => {
+      if (status === google.maps.places.PlacesServiceStatus.OK && results) {
+        console.log(results);
+        // clearResults();
+        clearMarkers();
+        for (let i = 0; i < results.length; i++) {
+          const markerLetter = String.fromCharCode(
+            "A".charCodeAt(0) + (i % 26)
+          );
+          markers[i] = new google.maps.Marker({
+            position: results[i].geometry.location,
+            animation: google.maps.Animation.DROP,
+            // icon: markerIcon,
+          });
+          // If the user clicks a hotel marker, show the details of that hotel
+          // in an info window.
+          // @ts-ignore TODO refactor to avoid storing on marker
+          markers[i].placeResult = results[i];
+          google.maps.event.addListener(markers[i], "click", showInfoWindow);
+          setTimeout(dropMarker(i), i * 100);
+          // addResult(results[i], i);
+        }
+      }
+    });
+  }
+
+  let searchButton = document.getElementById("select-button");
+  searchButton.addEventListener("click", () => search(RESTAURANTS)); //
 }
 
 window.initMap = initMap;
+
+const googleMapsScript = document.createElement("script");
+googleMapsScript.src =
+  "https://maps.googleapis.com/maps/api/js?language=en&key=AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM&libraries=places&callback=initMap&libraries=places&v=weekly";
+document.body.appendChild(googleMapsScript);
