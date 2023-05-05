@@ -1,3 +1,16 @@
+
+
+.dropdown-buttons {
+	display: none;
+	position: absolute;
+	z-index: 1;
+}
+
+.display {
+	display: block;
+}
+
+
 #map {
 	height: calc(100vh - 200px); /* subtract the height of navigation bar and search bar from viewport height */
 	width: 100%;

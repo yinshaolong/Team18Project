@@ -3,10 +3,30 @@ console.log(RESTAURANTS);
 let places;
 let MARKER_PATH;
 
+function displayDropDown() {
+  document.getElementById("dropdown").classList.toggle("display");
+}
+
+window.addEventListener("click", function (event) {
+  if (!event.target.matches("#select-button")) {
+    let dropdowns = document.getElementsByClassName("dropdown-buttons");
+    for (dropdown of dropdowns) {
+      let openDropDown = dropdown;
+      if (openDropDown.classList.contains("display")) {
+        openDropDown.classList.remove("display");
+      }
+    }
+  }
+});
+
+document
+  .getElementById("select-button")
+  .addEventListener("click", displayDropDown);
+
 function initMap() {
   const startLatLng = { lat: 49.2827, lng: -123.1207 };
   const options = {
-    zoom: 8,
+    zoom: 14,
     center: startLatLng,
   };
   const map = new google.maps.Map(document.getElementById("map"), options);
@@ -170,8 +190,14 @@ function initMap() {
     });
   }
 
-  let searchButton = document.getElementById("select-button");
-  searchButton.addEventListener("click", () => search(RESTAURANTS)); //
+  let restaurantButton = document.getElementById("restaurants");
+  let hotelsButton = document.getElementById("hotels");
+  let touristAttractionsButton = document.getElementById("tourist_attractions");
+  restaurantButton.addEventListener("click", () => search(RESTAURANTS));
+  hotelsButton.addEventListener("click", () => search(HOTELS)); //
+  touristAttractionsButton.addEventListener("click", () =>
+    search(TOURIST_ATTRACTIONS)
+  );
 }
 
 window.initMap = initMap;
