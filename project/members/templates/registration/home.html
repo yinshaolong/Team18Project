@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %} WanderWhiz Home {% endblock%}
+{% block content %}
+	{% block css1 %}
+	<link rel="stylesheet" href="{% static 'homestylesheet.css' %}">
+    {% endblock %}
+<script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM&callback=initMap&libraries=places"></script>
+<div class="container-heading">
+	<h2>Travel Beyond Boundaries!</h2>
+	<div class="heading-images">
+		<img src="{% static 'images/imgbin_airplane-airline-ticket-travel-icon-png.png' %}" alt="location image with plane"
+			width="100" height="75">
+		<img src="{% static 'images/ce9aek1muee0d0lhd8elh1c8jq.png' %}" alt="location image" width="75" height="75">
+	</div>
+</div>
+<div class="container">
+	<div class="container-map">
+		<div class="search-container">
+			<input class="form-control" id="search" type="text" placeholder="Search..." />
+			<button id="clear-button">Clear</button>
+			<button id="select-button">Select</button>
+		</div>
+		<div id="map"></div>
+		<div id="temp"></div>
+	</div>
+	<div class="textbox">
+		<h2>My Travel List</h2>
+		<div class="list">
+			<!-- Travel list items will be added here -->
+		</div>
+	</div>
+</div>
+{% endblock content %}
