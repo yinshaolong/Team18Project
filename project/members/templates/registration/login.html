@@ -1,11 +1,40 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block title %} Login {% endblock%}
 
 {% block content %}
-	<form method="post">
+	<!-- <form method="post">
 		{% csrf_token %}
 		{{ form.as_p }}
 		<p>Don't have an account? Create one <a href="/register"> here</a>!</p>
 		<button type="submit">Log In</button>
-	</form>
+	</form> -->
+	<div class="login-container">
+		<div class="login-box">
+		  <div class="lock-icon">
+			<img
+			  src=" {% static 'images/lock-4529981_1280.png' %} "
+			  alt="Lock Icon"
+			  width="200"
+			  height="200"
+			/>
+		  </div>
+		  <h2>Login</h2>
+		  <form method="post">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<!-- <div class="input-container">
+			  <label for="username">Username:</label>
+			  <input type="text" id="username" name="username" required />
+			</div>
+			<div class="input-container">
+			  <label for="password">Password:</label>
+			  <input type="password" id="password" name="password" required />
+			</div> -->
+			<div class="button-container">
+			  <button type="submit">Login</button>
+			</div>
+		  </form>
+		</div>
+	  </div>
 {% endblock content %}

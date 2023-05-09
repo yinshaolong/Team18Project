@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.template import loader
 from django.contrib.auth.models import User
+from .forms import CreateForm
 # Create your views here.
 #These functions will be called to render templates made in the 'templates' directory
 from django.http import HttpResponse
@@ -27,7 +28,7 @@ def login_user(request):
 
 def register_user(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CreateForm(request.POST)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get("username")
@@ -38,7 +39,7 @@ def register_user(request):
         else:
             messages.error(request, "There was an error creating the user. Please try again.")
     else:
-        form = UserCreationForm()
+        form = CreateForm()
     return render(request, 'registration/createuser.html', {'form': form})
 
 def signout(request):
