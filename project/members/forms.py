@@ -6,7 +6,11 @@ class LoginForm(UserCreationForm):
     username = forms.CharField(max_length=65,label="Username")
     password = forms.CharField(max_length=65, label="Password",widget=forms.PasswordInput)
 
-
+class CreateForm(UserCreationForm):
+    def init(self, args, **kwargs):
+        super(CreateForm, self).init(args, **kwargs)
+        for fieldname in ['username', 'password1', 'password2']:
+            self.fields[fieldname].help_text = None
 
 
 
