@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 # Create your views here.
 #These functions will be called to render templates made in the 'templates' directory
 from django.http import HttpResponse
-
+from project.settings import GOOGLE_API_KEY
 
 def login_user(request):
     if request.user.is_authenticated:
@@ -54,6 +54,11 @@ def signout(request):
 
 def home(request):
     if request.user.is_authenticated:
-        return render(request, 'registration/home.html')
+        context = {'key': GOOGLE_API_KEY}
+        return render(request, 'registration/home.html', context)
     else:
         return redirect('login')
+        
+
+def write(request):
+    pass

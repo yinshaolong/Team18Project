@@ -97,12 +97,7 @@ class Location(models.Model):
     latitude = models.DecimalField(max_digits=9, decimal_places=6)
     longitude= models.DecimalField(max_digits=9, decimal_places=6)
 
-class Itinerary(models.Model):
-    itinerary_id = models.IntegerField(primary_key=True,serialize=False, verbose_name= 'Itinerary ID', unique=True)
-    location_list = models.ManyToManyField(Location)
-    # user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    travel_time = models.DateTimeField()
-    
+
 class Business(models.Model):
     LODGING = 'Lodging'
     RESTAURANTS = 'Restaurants'
@@ -121,3 +116,9 @@ class Business(models.Model):
     address = models.CharField(max_length=255)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)
 
+
+class Itinerary(models.Model):
+    itinerary_id = models.IntegerField(primary_key=True,serialize=False, verbose_name= 'Itinerary ID', unique=True)
+    business_list = models.ManyToManyField(Business)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    travel_time = models.DateTimeField()
