@@ -197,11 +197,7 @@ margin-left: 8px;
 h2 {
   text-align: center;
   font-size: 28px;
-<<<<<<< HEAD
-  margin-bottom: 10px;
-=======
   margin-bottom: 20px;
->>>>>>> main
 }
 
 form {
@@ -213,19 +209,11 @@ form {
 .input-container {
   display: flex;
   flex-direction: column;
-<<<<<<< HEAD
-  margin-bottom: 3px;
-}
-
-label {
-  margin-bottom: 3px;
-=======
   margin-bottom: 5px;
 }
 
 label {
   margin-bottom: 5px;
->>>>>>> main
   font-size: 16px;
   font-weight: bold;
 }
@@ -238,11 +226,7 @@ input {
 }
 
 button{
-<<<<<<< HEAD
-background-color: #e8ba5c;
-=======
   background-color: #e8ba5c;
->>>>>>> main
 color: #fff;
 border: none;
 padding: 8px 16px;
@@ -251,13 +235,6 @@ cursor: pointer;
 margin-left: 8px;
   font-size: larger;
 }
-<<<<<<< HEAD
-form p{
-  display: flex;
-  flex-direction: column;
-}
-=======
->>>>>>> main
 .helptext {
   visibility: hidden;
 }
@@ -276,6 +253,10 @@ form p:nth-child(4) {
 }
 p:empty {
   display: none;
+}
+form p{
+  display: flex;
+  flex-direction: column;
 }
 
 /* Main Page Styles */
