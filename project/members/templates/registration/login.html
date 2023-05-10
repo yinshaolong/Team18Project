@@ -3,12 +3,14 @@
 {% block title %} Login {% endblock%}
 
 {% block content %}
-	<!-- <form method="post">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<p>Don't have an account? Create one <a href="/register"> here</a>!</p>
-		<button type="submit">Log In</button>
-	</form> -->
+	{% if messages %}
+	  <div class="messages">
+	    {% for message in messages %}
+	      <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+	    {% endfor %}
+	  </div>
+	{% endif %}
+
 	<div class="login-container">
 		<div class="login-box">
 		  <div class="lock-icon">
@@ -23,14 +25,6 @@
 		  <form method="post">
 			{% csrf_token %}
 			{{ form.as_p }}
-			<!-- <div class="input-container">
-			  <label for="username">Username:</label>
-			  <input type="text" id="username" name="username" required />
-			</div>
-			<div class="input-container">
-			  <label for="password">Password:</label>
-			  <input type="password" id="password" name="password" required />
-			</div> -->
 			<div class="button-container">
 			  <button type="submit">Login</button>
 			</div>
