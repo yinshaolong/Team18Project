@@ -12,6 +12,7 @@ body {
 li, li::marker {
   list-style-type: none;
 }
+
 /* Header Styles */
 header {
   background-color: #E7C176;
@@ -42,8 +43,8 @@ nav li a {
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
-  font-size: 18px;
-  font-weight: bold;
+  font-size: 20px;
+  font-weight: bolder;
 }
 
 nav li a:hover {
@@ -78,6 +79,7 @@ nav li a:hover {
   padding: 14px 16px;
   text-decoration: none;
   font-weight: bold;
+  font-size: larger;
 }
 
 .footer-links a:hover {
@@ -260,6 +262,15 @@ form p{
 }
 
 /* Main Page Styles */
+.dropdown-buttons {
+	display: none;
+	position: absolute;
+	z-index: 1;
+}
+
+.display {
+	display: block;
+}
 #map {
 	height: calc(100vh - 200px); /* subtract the height of navigation bar and search bar from viewport height */
 	width: 100%;
@@ -335,4 +346,74 @@ h2{
   
 .search-container button[type="submit"]:hover {
 	background-color: #9dbb9f;
+}
+
+/* #select-button {
+	background-color: #e8ba5c;
+	color: #fff;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-left: 8px;
+} */
+  
+#clear-button {
+	background-color: #dc3545;
+	color: #fff;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-left: 8px;
+}
+
+.filterContainer {
+  position: relative;
+  margin-left: 10px;
+}
+
+#select-button {
+  background-color: #E7C176;
+	color: #040303;
+  font-weight: bold;
+	border: none;
+	padding: 8px 16px;
+	border-radius: 4px;
+	cursor: pointer;
+	margin-left: 4px;
+}
+
+.dropdown-buttons {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 200px;
+  background-color: #fce0a8;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-top: 2% ;
+}
+
+.dropdown-buttons button {
+  display: block;
+  width: 100%;
+  padding: 8px;
+  background-color: #ad5e04;
+  margin: 2%;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-buttons button:hover {
+  background-color: #363333;
+}
+
+.filterContainer:hover .dropdown-buttons {
+  display: block;
 }
