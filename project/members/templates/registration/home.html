@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %} WanderWhiz Home {% endblock%}
-{% block content %}
-	{% block css1 %}
-	<link rel="stylesheet" href="{% static 'homestylesheet.css' %}">
-    {% endblock %}
+{% block extrahead %}
+<script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script src="{% static 'js/script.js' %}" defer type="module"></script>
 <script async defer
 	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM&callback=initMap&libraries=places"></script>
+{% comment %} <script src="./scripts/maps.js" defer type="module"></script>
+<script type="module" src="./js/scripts.js"></script> {% endcomment %}
+{% endblock %}
+{% block title %} <title>WanderWhiz Home </title>  {% endblock%}
+{% block content %}
+
+
 <div class="container-heading">
 	<h2>Travel Beyond Boundaries!</h2>
 	<div class="heading-images">
@@ -29,7 +34,7 @@
 		<h2>My Travel List</h2>
 		<div class="list">
 			<!-- Travel list items will be added here -->
-			
+			{% comment %} {% if %} {% endif %} {% endcomment %}
 		</div>
 	</div>
 </div>

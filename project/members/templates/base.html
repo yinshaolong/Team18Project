@@ -4,12 +4,14 @@
 <html lang="en">
 
 <head>
-    <title>Login </title>
+    {% block title %} <title>Login </title> {% endblock  %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro&display=swap" rel="stylesheet">
     {% block css %}
     <link rel="stylesheet" href="{% static 'loginstylesheet.css' %}">
+    {% endblock %}
+    {% block extrahead %}  {% comment   %} This extrahead is some extra head space to add scripts specific to certain pages {% endcomment %}
     {% endblock %}
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -29,6 +31,7 @@
                 {% if request.user.is_authenticated %}
                     <li><a href="{% url 'home'%}">Home</a></li>
                     <li><a href="{% url 'logout'%}">Logout</a></li>
+                    <li><a href="#">Hi {{request.user | title}}</a></li>
                 {% else %}
                     <li><a href="/login">Login</a></li>
                     <li><a href="/register">Sign Up</a></li>
