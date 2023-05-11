@@ -31,9 +31,11 @@ function initMap() {
   };
   const map = new google.maps.Map(document.getElementById("map"), options);
   places = new google.maps.places.PlacesService(map);
+  // console.log(">>> places", places.getDetails());
   var location_info = [];
   var index = 0;
   google.maps.event.addListener(map, "click", function (event) {
+    console.log(">>> event", event);
     addMarker({ coords: event.latLng });
     location_info.push({
       index: [{ lat: event.latLng.lat() }, { lng: event.latLng.lng() }],
@@ -106,10 +108,10 @@ function initMap() {
 
   function addMarker(props) {
     console.log("this is props" + props.coords);
-    string_coords = String(props.coords);
-    coordinates = string_coords.split(", ");
-    lat = coordinates[0].replace("(", "");
-    lng = coordinates[1].replace(")", "");
+    let string_coords = String(props.coords);
+    let coordinates = string_coords.split(", ");
+    let lat = coordinates[0].replace("(", "");
+    let lng = coordinates[1].replace(")", "");
     console.log("lng is " + lng + " and lat is " + lat);
     var marker = new google.maps.Marker({
       position: props.coords,
