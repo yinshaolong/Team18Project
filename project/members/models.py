@@ -92,33 +92,28 @@ from django.contrib.auth.models import *
         
 #     objects = UserManager()
 
-class Location(models.Model):
-    location_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='Location ID',unique=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude= models.DecimalField(max_digits=9, decimal_places=6)
+# class Location(models.Model):
+#     location_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='Location ID',unique=True)
+#     latitude = models.DecimalField(max_digits=9, decimal_places=6)
+#     longitude= models.DecimalField(max_digits=9, decimal_places=6)
 
 
 class Business(models.Model):
-    LODGING = 'Lodging'
-    RESTAURANTS = 'Restaurants'
-    TOURIST_ATTRACTIONS = 'Things To Do'
-    BUSINESS_TYPES = [
-        (LODGING, 'Lodging'),
-        (RESTAURANTS, 'Restaurants'),
-        (TOURIST_ATTRACTIONS, 'Things to do')
-    ]
-    business_id = models.IntegerField(primary_key=True, serialize=False, verbose_name='Business ID', unique=True)
     business_name = models.CharField(max_length=255)
-    business_type = models.CharField(max_length=12, choices=BUSINESS_TYPES, default=TOURIST_ATTRACTIONS)
-    pricerange = models.IntegerField()
-    country = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
+    business_type = models.CharField(max_length=12, default='Tourist Attraction')
     address = models.CharField(max_length=255)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    rating = models.CharField(max_length=5)
+    def __str__(self) -> str:
+        return self.business_name
+
 
 
 class Itinerary(models.Model):
-    itinerary_id = models.IntegerField(primary_key=True,serialize=False, verbose_name= 'Itinerary ID', unique=True)
+    itinerary_name = models.CharField(max_length=255)
     business_list = models.ManyToManyField(Business)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    travel_time = models.DateTimeField()
+
+    def __str__(self) -> str:
+        return self.itinerary_name
+        
+        

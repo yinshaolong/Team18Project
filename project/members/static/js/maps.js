@@ -1,23 +1,27 @@
 import { RESTAURANTS, TOURIST_ATTRACTIONS, HOTELS } from "./placeTypes.js";
 console.log(RESTAURANTS);
+let itenarary_saves = [];
 let places;
-let MARKER_PATH;
+let markers = [];
+const MARKER_PATH =
+  "https://developers.google.com/maps/documentation/javascript/images/marker_green";
 
 function displayDropDown() {
   document.getElementById("dropdown").classList.toggle("display");
 }
-
+// edited by ram \/ 
 window.addEventListener("click", function (event) {
   if (!event.target.matches("#select-button")) {
     let dropdowns = document.getElementsByClassName("dropdown-buttons");
-    for (dropdown of dropdowns) {
-      let openDropDown = dropdown;
+    for (let i = 0; i < dropdowns.length; i++) {
+      let openDropDown = dropdowns[i];
       if (openDropDown.classList.contains("display")) {
         openDropDown.classList.remove("display");
       }
     }
   }
 });
+
 
 document
   .getElementById("select-button")
@@ -31,9 +35,11 @@ function initMap() {
   };
   const map = new google.maps.Map(document.getElementById("map"), options);
   places = new google.maps.places.PlacesService(map);
+  // console.log(">>> places", places.getDetails());
   var location_info = [];
   var index = 0;
   google.maps.event.addListener(map, "click", function (event) {
+    console.log(">>> event", event);
     addMarker({ coords: event.latLng });
     location_info.push({
       index: [{ lat: event.latLng.lat() }, { lng: event.latLng.lng() }],
@@ -106,10 +112,10 @@ function initMap() {
 
   function addMarker(props) {
     console.log("this is props" + props.coords);
-    string_coords = String(props.coords);
-    coordinates = string_coords.split(", ");
-    lat = coordinates[0].replace("(", "");
-    lng = coordinates[1].replace(")", "");
+    let string_coords = String(props.coords);
+    let coordinates = string_coords.split(", ");
+    let lat = coordinates[0].replace("(", "");
+    let lng = coordinates[1].replace(")", "");
     console.log("lng is " + lng + " and lat is " + lat);
     var marker = new google.maps.Marker({
       position: props.coords,
@@ -167,7 +173,7 @@ function initMap() {
     places.nearbySearch(search, (results, status, pagniation) => {
       if (status === google.maps.places.PlacesServiceStatus.OK && results) {
         console.log(results);
-        // clearResults();
+        clearResults();
         clearMarkers();
         for (let i = 0; i < results.length; i++) {
           const markerLetter = String.fromCharCode(
@@ -184,8 +190,9 @@ function initMap() {
           markers[i].placeResult = results[i];
           google.maps.event.addListener(markers[i], "click", showInfoWindow);
           setTimeout(dropMarker(i), i * 100);
-          // addResult(results[i], i);
+          addResult(results[i], i);
         }
+        console.log(">> saves", itenarary_saves);
       }
     });
   }
@@ -200,8 +207,100 @@ function initMap() {
   );
 }
 
+//credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
+function clearResults() {
+  const results = document.getElementById("results");
+
+  while (results.childNodes[0]) {
+    results.removeChild(results.childNodes[0]);
+  }
+}
+
+function addResult(result, i) {
+  const results = document.getElementById("results");
+  const markerLetter = String.fromCharCode("A".charCodeAt(0) + (i % 26));
+  const markerIcon = MARKER_PATH + markerLetter + ".png";
+  const tr = document.createElement("tr");
+
+  tr.style.backgroundColor = i % 2 === 0 ? "#F6E0B3" : "#FFFFE0";
+  tr.onclick = function () {
+    google.maps.event.trigger(markers[i], "click");
+  };
+
+  const iconTd = document.createElement("td");
+  const nameTd = document.createElement("td");
+  const icon = document.createElement("img");
+  const button = document.createElement("button");
+  button.innerText = "Add";
+  icon.src = markerIcon;
+  icon.setAttribute("class", "placeIcon");
+  icon.setAttribute("className", "placeIcon");
+
+  const name = document.createTextNode(result.name);
+  let itenarary_item = getLocationInfo(result);
+  // console.log(itenarary_item);
+  iconTd.appendChild(icon);
+  nameTd.appendChild(name);
+  tr.appendChild(iconTd);
+  tr.appendChild(nameTd);
+  results.appendChild(tr);
+  tr.appendChild(button);
+  button.addEventListener("click", () => handleSave(itenarary_item));
+}
+function handleSave(itenarary_item) {
+  itenarary_saves.push(itenarary_item);
+  const list = document.getElementById("list");
+  const div = document.createElement("div");
+  const p = document.createElement("p");
+  for (let key in itenarary_item) {
+    p.innerHTML += `<strong><u>${key}</strong>: ${itenarary_item[key]} <br>`;
+  }
+  div.appendChild(p);
+  // div.appendChild(new_line);
+  div.className = "itenarary_item";
+  list.appendChild(div);
+}
+function getLocationInfo(location) {
+  return {
+    name: location.name,
+    address: location.vicinity,
+    type: location.types[0],
+    rating: location.rating,
+  };
+}
 window.initMap = initMap;
 
+function saveBusinesses() { 
+  console.log("Save button has been clicked");
+  let businessData = itenarary_saves;
+  fetch('/business/new/', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(businessData)
+  })
+    .then(response => response.json())
+    .then(result => {
+      // Handle the response from the Django backend
+      console.log(result);
+      itenarary_saves = []; // Clear the array
+      businessData = [];
+      var businesses = document.getElementsByClassName('itenarary_item');
+      while (businesses.length > 0) {
+        businesses[0].remove();
+      }
+    })
+    .catch(error => {
+      // Handle any errors
+      console.error('Error:', error);
+    });
+}
+  
+  
+const businessSaveButton = document.getElementById("save-button");
+businessSaveButton.addEventListener("click", saveBusinesses);
+  
 const googleMapsScript = document.createElement("script");
 googleMapsScript.src =
   "https://maps.googleapis.com/maps/api/js?language=en&key=AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM&libraries=places&callback=initMap&libraries=places&v=weekly";

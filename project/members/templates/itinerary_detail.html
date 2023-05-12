@@ -1,0 +1,33 @@
+
+{% extends 'registration/home.html'%}
+{% load static %}
+
+{% block itineraryinfo %}
+
+
+<h2>Itinerary Details</h2>
+<h3>Itinerary Name: {{ itinerary.itinerary_name }}</h3>
+<p>User ID: {{ itinerary.user_id }}</p>
+
+<h4>Your Hot Spots!:</h4>
+<ul>
+  {% for business in itinerary.business_list.all %}
+    <li>{{ business.business_name }}</li>
+    <!-- Display other relevant fields of the business -->
+  {% empty %}
+    <li>No businesses found.</li>
+  {% endfor %}
+</ul>
+
+<button onclick="window.location.href='{% url 'itinerary_update' id=itinerary.id %}'" class="btn btn-primary">Update Itinerary</button>
+<form action="{% url 'itinerary_delete' itinerary.id %}" method="post">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-danger">Delete Itinerary</button>
+</form>
+{% endblock %}
+
+
+
+
+
+
