@@ -2,6 +2,8 @@ import { RESTAURANTS, TOURIST_ATTRACTIONS, HOTELS } from "./placeTypes.js";
 console.log(RESTAURANTS);
 let itenarary_saves = [];
 let places;
+let infoWindow;
+let autocomplete;
 let markers = [];
 const MARKER_PATH =
   "https://developers.google.com/maps/documentation/javascript/images/marker_green";
@@ -35,27 +37,27 @@ function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), options);
   places = new google.maps.places.PlacesService(map);
   // console.log(">>> places", places.getDetails());
-  var location_info = [];
-  var index = 0;
+  let location_info = [];
+  let index = 0;
+
   google.maps.event.addListener(map, "click", function (event) {
-    console.log(">>> event", event);
     addMarker({ coords: event.latLng });
     location_info.push({
-      index: [{ lat: event.latLng.lat() }, { lng: event.latLng.lng() }],
+      // index: [{ lat: event.latLng.lat() }, { lng: event.latLng.lng() }],
     });
     index += 1;
     console.log(location_info);
   });
 
   //search bar
-  var input = document.getElementById("search");
-  var searchBox = new google.maps.places.SearchBox(input);
+  let input = document.getElementById("search");
+  let searchBox = new google.maps.places.SearchBox(input);
   //makes sure that the search is only limited to the bounds of the map box
   map.addListener("bounds_changed", function () {
     searchBox.setBounds(map.getBounds());
   });
 
-  var markers = [];
+  let markers = [];
   searchBox.addListener("places_changed", function () {
     let places = searchBox.getPlaces();
     //if array is empty dont want to do any other work with places
@@ -69,7 +71,7 @@ function initMap() {
     //re-init to an empty array
     markers = [];
 
-    var bounds = new google.maps.LatLngBounds();
+    let bounds = new google.maps.LatLngBounds();
     places.forEach(function (place) {
       if (!place.geometry) {
         return;
@@ -91,11 +93,12 @@ function initMap() {
         bounds.extend(place.geometry.location);
       }
     });
-
+    //>>>>>
     markers.forEach((marker) => {
-      var infoWindow = new google.maps.InfoWindow({
+      let infoWindow = new google.maps.InfoWindow({
         //  content: "lat: " + lat + "<br/>lng: " + lng,
         content: marker.content,
+        // content: document.getElementById(filterTextbox),
       });
       marker.addListener("click", function () {
         infoWindow.open(map, marker);
@@ -110,7 +113,7 @@ function initMap() {
   });
 
   function addMarker(props) {
-    console.log("this is props" + props.coords);
+    console.log("this is props", props);
     let string_coords = String(props.coords);
     let coordinates = string_coords.split(", ");
     let lat = coordinates[0].replace("(", "");
@@ -120,33 +123,12 @@ function initMap() {
       position: props.coords,
       map,
     });
-    //check content
-    var infoWindow = new google.maps.InfoWindow({
-      content: "lat: " + lat + "<br/>lng: " + lng,
-    });
 
     marker.addListener("click", function () {
       infoWindow.open(map, marker);
     });
   }
   //credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
-  function showInfoWindow() {
-    // @ts-ignore
-    const marker = this;
-
-    places.getDetails(
-      { placeId: marker.placeResult.place_id },
-      (place, status) => {
-        if (status !== google.maps.places.PlacesServiceStatus.OK) {
-          return;
-        }
-
-        infoWindow.open(map, marker);
-        buildIWContent(place);
-      }
-    );
-  }
-
   function dropMarker(i) {
     return function () {
       markers[i].setMap(map);
@@ -164,34 +146,36 @@ function initMap() {
   }
 
   function search(type) {
-    console.log("in search");
+    // console.log("in search");
     const search = {
       bounds: map.getBounds(),
       types: [type],
     };
     places.nearbySearch(search, (results, status, pagniation) => {
       if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-        console.log(results);
+        // console.log(results);
         clearResults();
         clearMarkers();
         for (let i = 0; i < results.length; i++) {
           const markerLetter = String.fromCharCode(
             "A".charCodeAt(0) + (i % 26)
           );
+          const markerIcon = MARKER_PATH + markerLetter + ".png";
           markers[i] = new google.maps.Marker({
             position: results[i].geometry.location,
             animation: google.maps.Animation.DROP,
-            // icon: markerIcon,
+            icon: markerIcon,
           });
           // If the user clicks a hotel marker, show the details of that hotel
           // in an info window.
           // @ts-ignore TODO refactor to avoid storing on marker
           markers[i].placeResult = results[i];
-          google.maps.event.addListener(markers[i], "click", showInfoWindow);
+          // google.maps.event.addListener(markers[i], "click", showInfoWindow);
+          google.maps.event.addListener(markers[i], "click", displayInfoWindow);
           setTimeout(dropMarker(i), i * 100);
           addResult(results[i], i);
         }
-        console.log(">> saves", itenarary_saves);
+        // console.log(">> saves", itenarary_saves);
       }
     });
   }
@@ -204,6 +188,14 @@ function initMap() {
   touristAttractionsButton.addEventListener("click", () =>
     search(TOURIST_ATTRACTIONS)
   );
+}
+function displayInfoWindow() {
+  let marker = this;
+  // console.log("marker", marker);
+  let infoWindow = new google.maps.InfoWindow({
+    content: ` ${marker.placeResult.name} <br> average rating: ${marker.placeResult.rating} <br> total number of user ratings:  ${marker.placeResult.user_ratings_total} <br> ${marker.placeResult.vicinity}`,
+  });
+  infoWindow.open(map, marker);
 }
 
 //credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
@@ -252,7 +244,7 @@ function handleSave(itenarary_item) {
   const div = document.createElement("div");
   const p = document.createElement("p");
   for (let key in itenarary_item) {
-    p.innerHTML += `<strong><u>${key}</strong>: ${itenarary_item[key]} <br>`;
+    p.innerHTML += `<strong><u>${key}</u></strong>: ${itenarary_item[key]} <br>`;
   }
   div.appendChild(p);
   // div.appendChild(new_line);
@@ -280,6 +272,7 @@ function getLocationInfo(location) {
     type: locationTypes,
   };
 }
+
 window.initMap = initMap;
 
 const googleMapsScript = document.createElement("script");
