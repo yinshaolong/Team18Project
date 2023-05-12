@@ -1,4 +1,44 @@
 import { RESTAURANTS, TOURIST_ATTRACTIONS, HOTELS } from "./placeTypes.js";
+
+function handleSave(itenarary_item) {
+  itenarary_saves.push(itenarary_item);
+  const list = document.getElementById("list");
+  const div = document.createElement("div");
+  const p = document.createElement("p");
+  for (let key in itenarary_item) {
+    p.innerHTML += `<strong><u>${key}</u></strong>: ${itenarary_item[key]} <br>`;
+  }
+  div.appendChild(p);
+  // div.appendChild(new_line);
+  div.className = "itenarary_item";
+  list.appendChild(div);
+}
+
+function getLocationInfo(location) {
+  let locationTypes = [];
+  for (let type of location.types) {
+    if (
+      type === "restaurant" ||
+      type === "lodging" ||
+      type === "tourist_attraction"
+    ) {
+      locationTypes.push(type);
+    }
+  }
+  if (locationTypes.length === 0) {
+    locationTypes.push(location.types[0]);
+  }
+
+  return {
+    address: location.vicinity,
+    name: location.name,
+    // types: location.types.splice(0, 2),
+    total_num_ratings: location.user_ratings_total,
+    rating: location.rating,
+    type: locationTypes,
+  };
+}
+
 console.log(RESTAURANTS);
 let itenarary_saves = [];
 let places;
@@ -81,8 +121,8 @@ function initMap() {
           map: map,
           title: place.name,
           position: place.geometry.location,
-          // content: "testing",
-          content: `lat: ${place.geometry.location.lat()} <br> lng: ${place.geometry.location.lng()}`,
+          // content: `lat: ${place.geometry.location.lat()} <br> lng: ${place.geometry.location.lng()}`,
+          content: ` ${place.name} <br>  ${place.vicinity} <br> <button onclick="handleSave(getLocationInfo(place))">Save</button>`,
         })
       );
 
@@ -238,40 +278,43 @@ function addResult(result, i) {
   tr.appendChild(button);
   button.addEventListener("click", () => handleSave(itenarary_item));
 }
-function handleSave(itenarary_item) {
-  itenarary_saves.push(itenarary_item);
-  const list = document.getElementById("list");
-  const div = document.createElement("div");
-  const p = document.createElement("p");
-  for (let key in itenarary_item) {
-    p.innerHTML += `<strong><u>${key}</u></strong>: ${itenarary_item[key]} <br>`;
-  }
-  div.appendChild(p);
-  // div.appendChild(new_line);
-  div.className = "itenarary_item";
-  list.appendChild(div);
-}
-function getLocationInfo(location) {
-  let locationTypes = [];
-  for (let type of location.types) {
-    if (
-      type === "restaurant" ||
-      type === "lodging" ||
-      type === "tourist_attraction"
-    ) {
-      locationTypes.push(type);
-    }
-  }
+// function handleSave(itenarary_item) {
+//   itenarary_saves.push(itenarary_item);
+//   const list = document.getElementById("list");
+//   const div = document.createElement("div");
+//   const p = document.createElement("p");
+//   for (let key in itenarary_item) {
+//     p.innerHTML += `<strong><u>${key}</u></strong>: ${itenarary_item[key]} <br>`;
+//   }
+//   div.appendChild(p);
+//   // div.appendChild(new_line);
+//   div.className = "itenarary_item";
+//   list.appendChild(div);
+// }
+// function getLocationInfo(location) {
+//   let locationTypes = [];
+//   for (let type of location.types) {
+//     if (
+//       type === "restaurant" ||
+//       type === "lodging" ||
+//       type === "tourist_attraction"
+//     ) {
+//       locationTypes.push(type);
+//     }
+//   }
+//   if (locationTypes.length === 0) {
+//     locationTypes.push(location.types[0]);
+//   }
 
-  return {
-    address: location.vicinity,
-    name: location.name,
-    // types: location.types.splice(0, 2),
-    total_num_ratings: location.user_ratings_total,
-    rating: location.rating,
-    type: locationTypes,
-  };
-}
+//   return {
+//     address: location.vicinity,
+//     name: location.name,
+//     // types: location.types.splice(0, 2),
+//     total_num_ratings: location.user_ratings_total,
+//     rating: location.rating,
+//     type: locationTypes,
+//   };
+// }
 
 window.initMap = initMap;
 
