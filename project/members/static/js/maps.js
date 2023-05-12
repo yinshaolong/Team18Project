@@ -122,7 +122,8 @@ function initMap() {
           title: place.name,
           position: place.geometry.location,
           // content: `lat: ${place.geometry.location.lat()} <br> lng: ${place.geometry.location.lng()}`,
-          content: ` ${place.name} <br>  ${place.vicinity} <br> <button onclick="handleSave(getLocationInfo(place))">Save</button>`,
+          content: ` ${place.name} <br>  ${place.vicinity} 
+          <br> <button onclick="handleSave(getLocationInfo(place))">Save</button>`,
         })
       );
 
@@ -279,6 +280,8 @@ function addResult(result, i) {
   button.addEventListener("click", () => handleSave(itenarary_item));
 }
 
+window.initMap = initMap;
+
 function saveBusinesses() {
   console.log("Save button has been clicked");
   let businessData = itenarary_saves;
@@ -305,6 +308,9 @@ function saveBusinesses() {
       console.error("Error:", error);
     });
 }
+
+const businessSaveButton = document.getElementById("save-button");
+businessSaveButton.addEventListener("click", saveBusinesses);
 window.addEventListener("click", function (event) {
   if (!event.target.matches("#select-button")) {
     let dropdowns = document.getElementsByClassName("dropdown-buttons");
@@ -316,7 +322,6 @@ window.addEventListener("click", function (event) {
     }
   }
 });
-window.initMap = initMap;
 
 const googleMapsScript = document.createElement("script");
 googleMapsScript.src =
