@@ -1,0 +1,30 @@
+
+{% extends 'registration/home.html'%}
+{% load static %}
+
+{% block itineraryinfo %}
+
+
+<h2>Itinerary Details</h2>
+<h3>Itinerary ID: {{ itinerary.itinerary_id }}</h3>
+<p>User ID: {{ itinerary.user_id }}</p>
+<p>Travel Time: {{ itinerary.travel_time }}</p>
+
+<h4>Businesses:</h4>
+<ul>
+  {% for business in itinerary.business_list.all %}
+    <li>{{ business.business_name }}</li>
+    <!-- Display other relevant fields of the business -->
+  {% empty %}
+    <li>No businesses found.</li>
+  {% endfor %}
+</ul>
+
+
+{% endblock %}
+
+
+
+
+
+

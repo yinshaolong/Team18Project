@@ -92,10 +92,10 @@ from django.contrib.auth.models import *
         
 #     objects = UserManager()
 
-class Location(models.Model):
-    location_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='Location ID',unique=True)
-    latitude = models.DecimalField(max_digits=9, decimal_places=6)
-    longitude= models.DecimalField(max_digits=9, decimal_places=6)
+# class Location(models.Model):
+#     location_id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='Location ID',unique=True)
+#     latitude = models.DecimalField(max_digits=9, decimal_places=6)
+#     longitude= models.DecimalField(max_digits=9, decimal_places=6)
 
 
 class Business(models.Model):
@@ -114,11 +114,17 @@ class Business(models.Model):
     country = models.CharField(max_length=255)
     city = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    location = models.ForeignKey(Location, on_delete=models.CASCADE)
+    
+    def __str__(self) -> str:
+        return self.business_name
+
 
 
 class Itinerary(models.Model):
+    itinerary_name = models.CharField(max_length=255)
     itinerary_id = models.IntegerField(primary_key=True,serialize=False, verbose_name= 'Itinerary ID', unique=True)
     business_list = models.ManyToManyField(Business)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    travel_time = models.DateTimeField()
+    # travel_time = models.DateTimeField()
+    def __str__(self) -> str:
+        return self.itinerary_name

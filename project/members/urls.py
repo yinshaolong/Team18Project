@@ -7,6 +7,11 @@ urlpatterns = [
     path('home/', home, name='home'),
     path('login/', MyLoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(next_page='login'),name='logout'),
+    path('itineraries/', itinerary_list, name='itinerary_list'),
+    path('itineraries/new/', create_itinerary, name='create_itinerary'),
+    path('itineraries/<int:itinerary_id>/', itinerary_detail, name='itinerary_detail'),
+    path('itineraries/<int:itinerary_id>/delete/', delete_itinerary, name='delete_itinerary'),
+
 ]
 
     # path('logout/', signout, name='logout'),
