@@ -258,6 +258,7 @@ function getLocationInfo(location) {
     name: location.name,
     type: location.types[0],
     total_num_ratings: location.user_ratings_total,
+    rating: location.rating,
   };
 }
 window.initMap = initMap;
