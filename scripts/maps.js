@@ -260,12 +260,24 @@ function handleSave(itenarary_item) {
   list.appendChild(div);
 }
 function getLocationInfo(location) {
+  let locationTypes = [];
+  for (let type of location.types) {
+    if (
+      type === "restaurant" ||
+      type === "lodging" ||
+      type === "tourist_attraction"
+    ) {
+      locationTypes.push(type);
+    }
+  }
+
   return {
     address: location.vicinity,
     name: location.name,
-    type: location.types[0],
+    // types: location.types.splice(0, 2),
     total_num_ratings: location.user_ratings_total,
     rating: location.rating,
+    type: locationTypes,
   };
 }
 window.initMap = initMap;
