@@ -272,23 +272,32 @@ window.initMap = initMap;
 
 function saveBusinesses() { 
   console.log("Save button has been clicked");
-  let businessData = itenarary_saves
+  let businessData = itenarary_saves;
   fetch('/business/new/', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/json'
-  },
-  body: JSON.stringify(businessData)
-})
-  .then(response => response.json())
-  .then(result => {
-    // Handle the response from the Django backend
-    console.log(result);
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(businessData)
   })
-  .catch(error => {
-    // Handle any errors
-    console.error('Error:', error);
-  });};
+    .then(response => response.json())
+    .then(result => {
+      // Handle the response from the Django backend
+      console.log(result);
+      itenarary_saves = []; // Clear the array
+      businessData = [];
+      var businesses = document.getElementsByClassName('itenarary_item');
+      while (businesses.length > 0) {
+        businesses[0].remove();
+      }
+    })
+    .catch(error => {
+      // Handle any errors
+      console.error('Error:', error);
+    });
+}
+  
+  
 const businessSaveButton = document.getElementById("save-button");
 businessSaveButton.addEventListener("click", saveBusinesses);
   
