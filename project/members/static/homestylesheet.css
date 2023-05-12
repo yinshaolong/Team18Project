@@ -1,3 +1,10 @@
+.itenarary_item{
+	margin-bottom: 5px;
+	margin-left: 15px;
+}
+.filterTextbox {
+	overflow: scroll;
+}
 .dropdown-buttons {
 	display: none;
 	position: absolute;
