@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block extrahead %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'homestylesheet.css' %}">
+{% endblock %}
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 <script src="{% static 'js/script.js' %}" defer type="module"></script>
 <script src="{% static 'js/maps.js' %}" defer type="module"></script>
@@ -36,16 +39,21 @@
 				</div>
 			  </div>
 		</div>
+		<div class="filterTextbox">
+			<table id="resultsTable">
+			  <tbody id="results"></tbody>
+			</table>
+		  </div>
 		<div id="map"></div>
 		<div id="temp"></div>
 	</div>
 	<div class="textbox">
 		<h2>My Travel List</h2>
-		<div class="list">
+		<div id="list">
 			<!-- Travel list items will be added here -->
 		{% block itineraryinfo %}
 		{% endblock %}
-			{% comment %} {% if %} {% endif %} {% endcomment %}
+		<button id="save-button"> Save </button> <!-- Add function call when button is pressed -->
 		</div>
 	</div>
 </div>

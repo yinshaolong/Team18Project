@@ -7,7 +7,9 @@ from django.urls import reverse_lazy
 from django.http import HttpResponse
 from project.settings import GOOGLE_API_KEY
 from .models import User, Business, Itinerary
-from .forms import ItineraryForm
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import json
 # from django.contrib.auth.models import User
 # from django.template import loader
 # from django.contrib.auth.decorators import login_required
@@ -78,23 +80,26 @@ def home(request):
 
 
 
-def create_itinerary(request, itinerary_id=None):
-    itinerary = get_object_or_404(Itinerary, itinerary_id=itinerary_id) if itinerary_id else None
-
+@csrf_exempt
+def create_business_from_req(request):
     if request.method == 'POST':
-        form = ItineraryForm(request.POST, instance=itinerary)
-        if form.is_valid():
-            itinerary = form.save(commit=False)
-            itinerary.user_id = request.user  # Assign the currently logged-in user
-            itinerary.save()
-            return redirect('itinerary_list')
-    else:
-        # Set the initial data for the form
-        initial_data = {'user_id': request.user}
-        form = ItineraryForm(instance=itinerary, initial=initial_data)
+        data = json.loads(request.body)
+        for business in data:
+            # Create a new Business object using the received data and save it to the database
+            Business.objects.create(
+                business_name=business['name'],
+                address=business['address'],
+                business_type=business['type'],
+                rating=business['rating']
+            )
+        # Return a JSON response indicating success
+        response_data = {'message': 'Businesses added successfully'}
+        return JsonResponse(response_data)        
+    # Return an error response for unsupported methods
+    response_data = {'error': 'Method not allowed'}
+    return JsonResponse(response_data, status=405)
 
-    return render(request, 'itinerary_form.html', {'form': form})
-    
+
 def itinerary_list(request):
     itineraries = Itinerary.objects.all()
     return render(request, 'itinerary_list.html', {'itineraries': itineraries})

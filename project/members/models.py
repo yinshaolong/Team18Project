@@ -99,22 +99,11 @@ from django.contrib.auth.models import *
 
 
 class Business(models.Model):
-    LODGING = 'Lodging'
-    RESTAURANTS = 'Restaurants'
-    TOURIST_ATTRACTIONS = 'Things To Do'
-    BUSINESS_TYPES = [
-        (LODGING, 'Lodging'),
-        (RESTAURANTS, 'Restaurants'),
-        (TOURIST_ATTRACTIONS, 'Things to do')
-    ]
     business_id = models.IntegerField(primary_key=True, serialize=False, verbose_name='Business ID', unique=True)
     business_name = models.CharField(max_length=255)
-    business_type = models.CharField(max_length=12, choices=BUSINESS_TYPES, default=TOURIST_ATTRACTIONS)
-    pricerange = models.IntegerField()
-    country = models.CharField(max_length=255)
-    city = models.CharField(max_length=255)
+    business_type = models.CharField(max_length=12, default='Tourist Attraction')
     address = models.CharField(max_length=255)
-    
+    rating = models.CharField(max_length=5)
     def __str__(self) -> str:
         return self.business_name
 
@@ -122,9 +111,11 @@ class Business(models.Model):
 
 class Itinerary(models.Model):
     itinerary_name = models.CharField(max_length=255)
-    itinerary_id = models.IntegerField(primary_key=True,serialize=False, verbose_name= 'Itinerary ID', unique=True)
+    itinerary_id = models.IntegerField(primary_key=True, verbose_name= 'Itinerary ID', unique=True)
     business_list = models.ManyToManyField(Business)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    # travel_time = models.DateTimeField()
+
     def __str__(self) -> str:
         return self.itinerary_name
+        
+        

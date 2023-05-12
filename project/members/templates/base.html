@@ -31,7 +31,7 @@
                 {% if request.user.is_authenticated %}
                     <li><a href="{% url 'home'%}">Home</a></li>
                     <li><a href="{% url 'logout'%}">Logout</a></li>
-                    <li><a href="#">Hi {{request.user | title}}</a></li>
+                    <li><a href="#">Hi {{request.user | title}}!</a></li>
                 {% else %}
                     <li><a href="/login">Login</a></li>
                     <li><a href="/register">Sign Up</a></li>
