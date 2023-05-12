@@ -1,4 +1,10 @@
-
+.itenarary_item {
+	margin-bottom: 15px;
+	margin-left: 15px;
+}
+.filterTextbox{
+	overflow: scroll;
+}
 .dropdown-buttons {
 	display: none;
 	position: absolute;
@@ -11,11 +17,14 @@
 
 
 #map {
-	height: calc(100vh - 200px); /* subtract the height of navigation bar and search bar from viewport height */
+	/* height: calc(100vh - 200); subtract the height of navigation bar and search bar from viewport height */
+	height: 100%;
 	width: 100%;
 	grid-row: 1;
 	border-radius: 10px;
 	border-color: #E7C176;
+	grid-column: 2;
+	grid-row: 2;
   }
   
   #search {
@@ -34,15 +43,15 @@ body{
 	font-family: 'Source Sans Pro', sans-serif;
 	margin: 0; 
 }
-  .container {
+.container {
 	margin-top: 5px;
 	margin-bottom: 100px;
 	display: grid;
-	grid-template-columns: 2fr 1fr;
-	grid-row: 1 / -1;;
-	height: calc(100vh - 200px); /* subtract the height of navigation bar and search bar from viewport height */
-	padding: 0px 25px ;
-  }
+	grid-template-columns: 3fr 1fr;
+	/* grid-row: 1 / -1; */
+	height: calc(100vh - 200px);
+	padding: 0px 25px;
+}
   header{
 	background-color: #E7C176;
 	display: flex;
@@ -85,9 +94,10 @@ body{
 	border-radius: 10px;
   }
   .container-map{
-	display: flex;
-	flex-direction: column;
-
+	display: grid;
+	grid-template-columns: 1fr 4fr;
+	grid-template-rows: 1fr 8fr;
+	min-height: 0;
   }
   h2{
 	padding-left: 10px;
@@ -109,6 +119,8 @@ body{
 	border: 2px solid #ccc;
 	border-radius: 20px;
 	padding: 7px;
+	grid-column: 1/-1;
+	grid-row: 1;
   }
   
   .search-container input[type="text"] {

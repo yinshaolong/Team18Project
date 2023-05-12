@@ -1,3 +1,10 @@
+.itenarary_item{
+	margin-bottom: 5px;
+	margin-left: 15px;
+}
+.filterTextbox {
+	overflow: scroll;
+}
 .dropdown-buttons {
 	display: none;
 	position: absolute;
@@ -36,12 +43,11 @@ body{
 	margin-top: 5px;
 	margin-bottom: 100px;
 	display: grid;
-	grid-template-columns: 2fr 1fr;
+	grid-template-columns: 1fr 3fr 1fr;
 	grid-row: 1 / -1;;
 	height: calc(100vh - 200px); /* subtract the height of navigation bar and search bar from viewport height */
 	padding: 0px 25px ;
 }
-
 .textbox {
 	border-radius: 10px;
 	margin-left: 20px;
