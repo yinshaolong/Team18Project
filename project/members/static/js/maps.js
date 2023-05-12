@@ -1,7 +1,49 @@
 import { RESTAURANTS, TOURIST_ATTRACTIONS, HOTELS } from "./placeTypes.js";
+
+function handleSave(itenarary_item) {
+  itenarary_saves.push(itenarary_item);
+  const list = document.getElementById("list");
+  const div = document.createElement("div");
+  const p = document.createElement("p");
+  for (let key in itenarary_item) {
+    p.innerHTML += `<strong><u>${key}</u></strong>: ${itenarary_item[key]} <br>`;
+  }
+  div.appendChild(p);
+  // div.appendChild(new_line);
+  div.className = "itenarary_item";
+  list.appendChild(div);
+}
+
+function getLocationInfo(location) {
+  let locationTypes = [];
+  for (let type of location.types) {
+    if (
+      type === "restaurant" ||
+      type === "lodging" ||
+      type === "tourist_attraction"
+    ) {
+      locationTypes.push(type);
+    }
+  }
+  if (locationTypes.length === 0) {
+    locationTypes.push(location.types[0]);
+  }
+
+  return {
+    address: location.vicinity,
+    name: location.name,
+    // types: location.types.splice(0, 2),
+    total_num_ratings: location.user_ratings_total,
+    rating: location.rating,
+    type: locationTypes,
+  };
+}
+
 console.log(RESTAURANTS);
 let itenarary_saves = [];
 let places;
+let infoWindow;
+let autocomplete;
 let markers = [];
 const MARKER_PATH =
   "https://developers.google.com/maps/documentation/javascript/images/marker_green";
@@ -9,19 +51,18 @@ const MARKER_PATH =
 function displayDropDown() {
   document.getElementById("dropdown").classList.toggle("display");
 }
-// edited by ram \/ 
+
 window.addEventListener("click", function (event) {
   if (!event.target.matches("#select-button")) {
     let dropdowns = document.getElementsByClassName("dropdown-buttons");
-    for (let i = 0; i < dropdowns.length; i++) {
-      let openDropDown = dropdowns[i];
+    for (dropdown of dropdowns) {
+      let openDropDown = dropdown;
       if (openDropDown.classList.contains("display")) {
         openDropDown.classList.remove("display");
       }
     }
   }
 });
-
 
 document
   .getElementById("select-button")
@@ -36,27 +77,27 @@ function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), options);
   places = new google.maps.places.PlacesService(map);
   // console.log(">>> places", places.getDetails());
-  var location_info = [];
-  var index = 0;
+  let location_info = [];
+  let index = 0;
+
   google.maps.event.addListener(map, "click", function (event) {
-    console.log(">>> event", event);
     addMarker({ coords: event.latLng });
     location_info.push({
-      index: [{ lat: event.latLng.lat() }, { lng: event.latLng.lng() }],
+      // index: [{ lat: event.latLng.lat() }, { lng: event.latLng.lng() }],
     });
     index += 1;
     console.log(location_info);
   });
 
   //search bar
-  var input = document.getElementById("search");
-  var searchBox = new google.maps.places.SearchBox(input);
+  let input = document.getElementById("search");
+  let searchBox = new google.maps.places.SearchBox(input);
   //makes sure that the search is only limited to the bounds of the map box
   map.addListener("bounds_changed", function () {
     searchBox.setBounds(map.getBounds());
   });
 
-  var markers = [];
+  let markers = [];
   searchBox.addListener("places_changed", function () {
     let places = searchBox.getPlaces();
     //if array is empty dont want to do any other work with places
@@ -70,7 +111,7 @@ function initMap() {
     //re-init to an empty array
     markers = [];
 
-    var bounds = new google.maps.LatLngBounds();
+    let bounds = new google.maps.LatLngBounds();
     places.forEach(function (place) {
       if (!place.geometry) {
         return;
@@ -80,8 +121,8 @@ function initMap() {
           map: map,
           title: place.name,
           position: place.geometry.location,
-          // content: "testing",
-          content: `lat: ${place.geometry.location.lat()} <br> lng: ${place.geometry.location.lng()}`,
+          // content: `lat: ${place.geometry.location.lat()} <br> lng: ${place.geometry.location.lng()}`,
+          content: ` ${place.name} <br>  ${place.vicinity} <br> <button onclick="handleSave(getLocationInfo(place))">Save</button>`,
         })
       );
 
@@ -92,11 +133,12 @@ function initMap() {
         bounds.extend(place.geometry.location);
       }
     });
-
+    //>>>>>
     markers.forEach((marker) => {
-      var infoWindow = new google.maps.InfoWindow({
+      let infoWindow = new google.maps.InfoWindow({
         //  content: "lat: " + lat + "<br/>lng: " + lng,
         content: marker.content,
+        // content: document.getElementById(filterTextbox),
       });
       marker.addListener("click", function () {
         infoWindow.open(map, marker);
@@ -111,7 +153,7 @@ function initMap() {
   });
 
   function addMarker(props) {
-    console.log("this is props" + props.coords);
+    console.log("this is props", props);
     let string_coords = String(props.coords);
     let coordinates = string_coords.split(", ");
     let lat = coordinates[0].replace("(", "");
@@ -121,33 +163,12 @@ function initMap() {
       position: props.coords,
       map,
     });
-    //check content
-    var infoWindow = new google.maps.InfoWindow({
-      content: "lat: " + lat + "<br/>lng: " + lng,
-    });
 
     marker.addListener("click", function () {
       infoWindow.open(map, marker);
     });
   }
   //credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
-  function showInfoWindow() {
-    // @ts-ignore
-    const marker = this;
-
-    places.getDetails(
-      { placeId: marker.placeResult.place_id },
-      (place, status) => {
-        if (status !== google.maps.places.PlacesServiceStatus.OK) {
-          return;
-        }
-
-        infoWindow.open(map, marker);
-        buildIWContent(place);
-      }
-    );
-  }
-
   function dropMarker(i) {
     return function () {
       markers[i].setMap(map);
@@ -165,34 +186,36 @@ function initMap() {
   }
 
   function search(type) {
-    console.log("in search");
+    // console.log("in search");
     const search = {
       bounds: map.getBounds(),
       types: [type],
     };
     places.nearbySearch(search, (results, status, pagniation) => {
       if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-        console.log(results);
+        // console.log(results);
         clearResults();
         clearMarkers();
         for (let i = 0; i < results.length; i++) {
           const markerLetter = String.fromCharCode(
             "A".charCodeAt(0) + (i % 26)
           );
+          const markerIcon = MARKER_PATH + markerLetter + ".png";
           markers[i] = new google.maps.Marker({
             position: results[i].geometry.location,
             animation: google.maps.Animation.DROP,
-            // icon: markerIcon,
+            icon: markerIcon,
           });
           // If the user clicks a hotel marker, show the details of that hotel
           // in an info window.
           // @ts-ignore TODO refactor to avoid storing on marker
           markers[i].placeResult = results[i];
-          google.maps.event.addListener(markers[i], "click", showInfoWindow);
+          // google.maps.event.addListener(markers[i], "click", showInfoWindow);
+          google.maps.event.addListener(markers[i], "click", displayInfoWindow);
           setTimeout(dropMarker(i), i * 100);
           addResult(results[i], i);
         }
-        console.log(">> saves", itenarary_saves);
+        // console.log(">> saves", itenarary_saves);
       }
     });
   }
@@ -205,6 +228,14 @@ function initMap() {
   touristAttractionsButton.addEventListener("click", () =>
     search(TOURIST_ATTRACTIONS)
   );
+}
+function displayInfoWindow() {
+  let marker = this;
+  // console.log("marker", marker);
+  let infoWindow = new google.maps.InfoWindow({
+    content: ` ${marker.placeResult.name} <br> average rating: ${marker.placeResult.rating} <br> total number of user ratings:  ${marker.placeResult.user_ratings_total} <br> ${marker.placeResult.vicinity}`,
+  });
+  infoWindow.open(map, marker);
 }
 
 //credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
@@ -231,7 +262,7 @@ function addResult(result, i) {
   const nameTd = document.createElement("td");
   const icon = document.createElement("img");
   const button = document.createElement("button");
-  button.innerText = "Add";
+  button.innerText = "Save";
   icon.src = markerIcon;
   icon.setAttribute("class", "placeIcon");
   icon.setAttribute("className", "placeIcon");
@@ -247,60 +278,46 @@ function addResult(result, i) {
   tr.appendChild(button);
   button.addEventListener("click", () => handleSave(itenarary_item));
 }
-function handleSave(itenarary_item) {
-  itenarary_saves.push(itenarary_item);
-  const list = document.getElementById("list");
-  const div = document.createElement("div");
-  const p = document.createElement("p");
-  for (let key in itenarary_item) {
-    p.innerHTML += `<strong><u>${key}</strong>: ${itenarary_item[key]} <br>`;
-  }
-  div.appendChild(p);
-  // div.appendChild(new_line);
-  div.className = "itenarary_item";
-  list.appendChild(div);
-}
-function getLocationInfo(location) {
-  return {
-    name: location.name,
-    address: location.vicinity,
-    type: location.types[0],
-    rating: location.rating,
-  };
-}
+// function handleSave(itenarary_item) {
+//   itenarary_saves.push(itenarary_item);
+//   const list = document.getElementById("list");
+//   const div = document.createElement("div");
+//   const p = document.createElement("p");
+//   for (let key in itenarary_item) {
+//     p.innerHTML += `<strong><u>${key}</u></strong>: ${itenarary_item[key]} <br>`;
+//   }
+//   div.appendChild(p);
+//   // div.appendChild(new_line);
+//   div.className = "itenarary_item";
+//   list.appendChild(div);
+// }
+// function getLocationInfo(location) {
+//   let locationTypes = [];
+//   for (let type of location.types) {
+//     if (
+//       type === "restaurant" ||
+//       type === "lodging" ||
+//       type === "tourist_attraction"
+//     ) {
+//       locationTypes.push(type);
+//     }
+//   }
+//   if (locationTypes.length === 0) {
+//     locationTypes.push(location.types[0]);
+//   }
+
+//   return {
+//     address: location.vicinity,
+//     name: location.name,
+//     // types: location.types.splice(0, 2),
+//     total_num_ratings: location.user_ratings_total,
+//     rating: location.rating,
+//     type: locationTypes,
+//   };
+// }
+
 window.initMap = initMap;
 
-function saveBusinesses() { 
-  console.log("Save button has been clicked");
-  let businessData = itenarary_saves;
-  fetch('/business/new/', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(businessData)
-  })
-    .then(response => response.json())
-    .then(result => {
-      // Handle the response from the Django backend
-      console.log(result);
-      itenarary_saves = []; // Clear the array
-      businessData = [];
-      var businesses = document.getElementsByClassName('itenarary_item');
-      while (businesses.length > 0) {
-        businesses[0].remove();
-      }
-    })
-    .catch(error => {
-      // Handle any errors
-      console.error('Error:', error);
-    });
-}
-  
-  
-const businessSaveButton = document.getElementById("save-button");
-businessSaveButton.addEventListener("click", saveBusinesses);
-  
 const googleMapsScript = document.createElement("script");
 googleMapsScript.src =
   "https://maps.googleapis.com/maps/api/js?language=en&key=AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM&libraries=places&callback=initMap&libraries=places&v=weekly";
