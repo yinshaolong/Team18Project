@@ -172,7 +172,7 @@ function initMap() {
     places.nearbySearch(search, (results, status, pagniation) => {
       if (status === google.maps.places.PlacesServiceStatus.OK && results) {
         console.log(results);
-        // clearResults();
+        clearResults();
         clearMarkers();
         for (let i = 0; i < results.length; i++) {
           const markerLetter = String.fromCharCode(
@@ -207,6 +207,14 @@ function initMap() {
 }
 
 //credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
+function clearResults() {
+  const results = document.getElementById("results");
+
+  while (results.childNodes[0]) {
+    results.removeChild(results.childNodes[0]);
+  }
+}
+
 function addResult(result, i) {
   const results = document.getElementById("results");
   const markerLetter = String.fromCharCode("A".charCodeAt(0) + (i % 26));
@@ -243,7 +251,6 @@ function handleSave(itenarary_item) {
   const list = document.getElementById("list");
   const div = document.createElement("div");
   const p = document.createElement("p");
-  // const new_line = document.createElement("br");
   for (let key in itenarary_item) {
     p.innerHTML += `<strong><u>${key}</strong>: ${itenarary_item[key]} <br>`;
   }
