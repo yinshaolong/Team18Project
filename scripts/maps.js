@@ -278,43 +278,45 @@ function addResult(result, i) {
   tr.appendChild(button);
   button.addEventListener("click", () => handleSave(itenarary_item));
 }
-// function handleSave(itenarary_item) {
-//   itenarary_saves.push(itenarary_item);
-//   const list = document.getElementById("list");
-//   const div = document.createElement("div");
-//   const p = document.createElement("p");
-//   for (let key in itenarary_item) {
-//     p.innerHTML += `<strong><u>${key}</u></strong>: ${itenarary_item[key]} <br>`;
-//   }
-//   div.appendChild(p);
-//   // div.appendChild(new_line);
-//   div.className = "itenarary_item";
-//   list.appendChild(div);
-// }
-// function getLocationInfo(location) {
-//   let locationTypes = [];
-//   for (let type of location.types) {
-//     if (
-//       type === "restaurant" ||
-//       type === "lodging" ||
-//       type === "tourist_attraction"
-//     ) {
-//       locationTypes.push(type);
-//     }
-//   }
-//   if (locationTypes.length === 0) {
-//     locationTypes.push(location.types[0]);
-//   }
-
-//   return {
-//     address: location.vicinity,
-//     name: location.name,
-//     // types: location.types.splice(0, 2),
-//     total_num_ratings: location.user_ratings_total,
-//     rating: location.rating,
-//     type: locationTypes,
-//   };
-// }
+function saveBusinesses() {
+  console.log("Save button has been clicked");
+  let businessData = itenarary_saves;
+  fetch("/business/new/", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(businessData),
+  })
+    .then((response) => response.json())
+    .then((result) => {
+      // Handle the response from the Django backend
+      console.log(result);
+      itenarary_saves = []; // Clear the array
+      businessData = [];
+      var businesses = document.getElementsByClassName("itenarary_item");
+      while (businesses.length > 0) {
+        businesses[0].remove();
+      }
+    })
+    .catch((error) => {
+      // Handle any errors
+      console.error("Error:", error);
+    });
+}
+window.addEventListener("click", function (event) {
+  if (!event.target.matches("#select-button")) {
+    let dropdowns = document.getElementsByClassName("dropdown-buttons");
+    for (let i = 0; i < dropdowns.length; i++) {
+      let openDropDown = dropdowns[i];
+      if (openDropDown.classList.contains("display")) {
+        openDropDown.classList.remove("display");
+      }
+    }
+  }
+});
+const businessSaveButton = document.getElementById("save-button");
+businessSaveButton.addEventListener("click", saveBusinesses);
 
 window.initMap = initMap;
 
