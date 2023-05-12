@@ -213,7 +213,7 @@ function addResult(result, i) {
   const markerIcon = MARKER_PATH + markerLetter + ".png";
   const tr = document.createElement("tr");
 
-  tr.style.backgroundColor = i % 2 === 0 ? "#F0F0F0" : "#FFFFFF";
+  tr.style.backgroundColor = i % 2 === 0 ? "#F6E0B3" : "#FFFFE0";
   tr.onclick = function () {
     google.maps.event.trigger(markers[i], "click");
   };
@@ -245,7 +245,7 @@ function handleSave(itenarary_item) {
   const p = document.createElement("p");
   // const new_line = document.createElement("br");
   for (let key in itenarary_item) {
-    p.innerHTML += `<strong><u>${key}</u></strong>: ${itenarary_item[key]} <br>`;
+    p.innerHTML += `<strong><u>${key}</strong>: ${itenarary_item[key]} <br>`;
   }
   div.appendChild(p);
   // div.appendChild(new_line);
@@ -258,6 +258,7 @@ function getLocationInfo(location) {
     name: location.name,
     type: location.types[0],
     total_num_ratings: location.user_ratings_total,
+    rating: location.rating,
   };
 }
 window.initMap = initMap;
