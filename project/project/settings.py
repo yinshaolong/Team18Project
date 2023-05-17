@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-sy+l9)5d=f9p6aw@(tc%076r)ex+x!cg8t**4$o&uh+n*^r!n3
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.2']
 
 
 # Application definition
@@ -127,3 +127,7 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = 'login/'
 GOOGLE_API_KEY = 'AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM'
+
+CONTENT_TYPES = {
+    'js': 'text/javascript'
+}
