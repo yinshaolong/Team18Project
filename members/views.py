@@ -47,8 +47,7 @@ def register_user(request):
 
 def home(request):
     if request.user.is_authenticated:
-        context = {'key': GOOGLE_API_KEY}
-        return render(request, 'registration/home.html', context)
+        return redirect('login')
     else:
         return redirect('login')
         
