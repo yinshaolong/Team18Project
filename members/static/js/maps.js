@@ -6,7 +6,9 @@ function handleSave(itenarary_item) {
   const div = document.createElement("div");
   const p = document.createElement("p");
   for (let key in itenarary_item) {
-    p.innerHTML += `<strong><u>${key}</u></strong>: ${itenarary_item[key]} <br>`;
+    var modKey = key.toUpperCase();
+    modKey = modKey.replace(/_/g, " ");
+    p.innerHTML += `<strong><u>${modKey}</u></strong>: ${itenarary_item[key]} <br>`;
   }
   div.appendChild(p);
   // div.appendChild(new_line);
@@ -28,7 +30,7 @@ function getLocationInfo(location) {
   if (locationTypes.length === 0) {
     locationTypes.push(location.types[0]);
   }
-
+  console.log(locationTypes)
   return {
     address: location.vicinity,
     name: location.name,
@@ -55,7 +57,7 @@ function displayDropDown() {
 window.addEventListener("click", function (event) {
   if (!event.target.matches("#select-button")) {
     let dropdowns = document.getElementsByClassName("dropdown-buttons");
-    for (dropdown of dropdowns) {
+    for (dropdown in dropdowns) {
       let openDropDown = dropdown;
       if (openDropDown.classList.contains("display")) {
         openDropDown.classList.remove("display");
