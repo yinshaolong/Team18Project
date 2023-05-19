@@ -1,2 +1,5 @@
 vscode
 marker.jpg
+venv/
+**/__pycache__
+db.sqlite

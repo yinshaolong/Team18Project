@@ -51,35 +51,6 @@ def home(request):
         return render(request, 'registration/home.html', context)
     else:
         return redirect('login')
-        
-# def login_user(request):
-#     if request.user.is_authenticated:
-#         return redirect('home')
-#     else:
-#         if request.method == 'POST':
-#             username = request.POST["username"]
-#             password = request.POST["password"]
-#             user = authenticate(request, username=username, password=password)
-#             if user is not None:
-#                 auth_login(request, user)
-#                 messages.success(request, f"User has been authenticated. Welcome {user.get_username()}!")
-#                 return redirect('home')
-#             else:
-#                 messages.error(request, "There was an error logging in. Please try again...")
-#                 return render(request, 'registration/login.html')
-#         else:
-#             return render(request, 'registration/login.html', {})
-
-# def signout(request):
-#     if request.user.is_authenticated:
-#         logout(request)
-#         messages.success(request, "You have been logged out! :)")
-#         return redirect('registration/login.html')
-#     else:
-#         return redirect('home')
-
-
-
 
 @csrf_exempt
 def create_business_from_req(request):
@@ -111,7 +82,9 @@ def itinerary_list(request):
 
 def itinerary_detail(request, id):
     itinerary = get_object_or_404(Itinerary, id=id)
-    return render(request, 'itinerary_detail.html', {'itinerary': itinerary})
+    response = requests.get("https://api.freecurrencyapi.com/v1/latest?apikey=CgEOWBd1EiC5ux0RqxXDRml6xpKh31hCYJliaZzD&currencies=EUR%2CUSD%2CJPY%2CBGN%2CCZK%2CDKK%2CGBP%2CHUF%2CPLN%2CRON%2CSEK%2CCHF%2CISK%2CNOK%2CHRK%2CRUB%2CTRY%2CAUD%2CBRL%2CCAD%2CCNY%2CHKD%2CIDR%2CILS%2CINR%2CKRW%2CMXN%2CMYR%2CNZD%2CPHP%2CSGD%2CTHB%2CZAR&base_currency=CAD" )
+    currencydata = (response.json())['data']
+    return render(request, 'itinerary_detail.html', {'itinerary': itinerary, 'currencydata': currencydata})
 
 def itinerary_update(request, id):
     itinerary = get_object_or_404(Itinerary, id=id)
