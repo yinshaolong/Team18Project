@@ -1,5 +1,8 @@
 import { RESTAURANTS, TOURIST_ATTRACTIONS, HOTELS } from "./placeTypes.js";
 
+let expLatitude = 43.9923;
+let expLongitude = -123.1283;
+
 function handleSave(itenarary_item) {
   itenarary_saves.push(itenarary_item);
   const list = document.getElementById("list");
@@ -327,3 +330,5 @@ const googleMapsScript = document.createElement("script");
 googleMapsScript.src =
   "https://maps.googleapis.com/maps/api/js?language=en&key=AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM&libraries=places&callback=initMap&libraries=places&v=weekly";
 document.body.appendChild(googleMapsScript);
+
+export { expLatitude, expLongitude };
