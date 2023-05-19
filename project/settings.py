@@ -49,7 +49,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -128,7 +127,3 @@ LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = 'login/'
 GOOGLE_API_KEY = 'AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM'
-
-CONTENT_TYPES = {
-    'js': 'text/javascript'
-}
