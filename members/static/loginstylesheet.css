@@ -59,6 +59,9 @@ nav li a:hover {
   color: #fff;
   padding: 10px;
   margin-bottom: 0%;
+  position: absolute;
+  bottom: 0vh;
+  width: 100%;
 }
 
 .container-footer {
@@ -416,4 +419,15 @@ h2{
 
 .filterContainer:hover .dropdown-buttons {
   display: block;
+}
+
+input[type=submit]{
+  background-color: #e8ba5c;
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-left: 8px;
+  font-size: larger;
 }
