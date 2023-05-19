@@ -1,4 +1,4 @@
-import { expLongitude, expLatitude } from "../../../../Term18Project/Team18Project/project/members/static/js/maps.js"
+import { expLongitude, expLatitude } from "./maps"
 const APIKEY = "d0b6c9ade1db30fe160940ff847a63cb"
 const mapicon = document.getElementsByClassName("google-map-icon");
 
