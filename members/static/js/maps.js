@@ -1,6 +1,7 @@
 import { RESTAURANTS, TOURIST_ATTRACTIONS, HOTELS } from "./placeTypes.js";
 let map, popup, Popup;
 let marker_coordinates = [];
+let country_name;
 
 function handleSave(itenarary_item) {
   itenarary_saves.push(itenarary_item);
@@ -31,7 +32,6 @@ function getLocationInfo(location) {
     locationTypes.push(location.types[0]);
   }
 
-  console.log(location);
   return {
     address: location.vicinity ? location.vicinity : location.formatted_address,
     name: location.name,
@@ -44,9 +44,6 @@ function getLocationInfo(location) {
 console.log(RESTAURANTS);
 let itenarary_saves = [];
 let places;
-//>>>>
-// let infoWindow;
-// let autocomplete;
 let markers = [];
 const MARKER_PATH =
   "https://developers.google.com/maps/documentation/javascript/images/marker_green";
@@ -135,15 +132,6 @@ function initMap() {
     }
   }
 
-  // let popupContent = document.createElement("div");
-  // let searchSaveButton;
-  // popupcContent.innerHTML = "";
-  // popup = new Popup(
-  //   new google.maps.LatLng(-33.866, 151.196),
-  //   document.getElementById("content")
-  // );
-  // popup.setMap(map);
-
   const map = new google.maps.Map(document.getElementById("map"), options);
   places = new google.maps.places.PlacesService(map);
   let location_info = [];
@@ -196,15 +184,6 @@ function initMap() {
         bounds.extend(place.geometry.location);
       }
     });
-    //>>>>>
-
-    // markers[i].placeResult = results[i];
-    // google.maps.event.addListener(markers[i], "click", showInfoWindow);
-    // google.maps.event.addListener(marker, "click", () =>
-    //   displayInfoWindow(marker, place)
-    // );
-
-    // let marker_coordinates = [];
     markers.forEach((marker) => {
       google.maps.event.addListener(marker, "click", function (event) {
         marker_coordinates.push(event.latLng.lat());
@@ -212,16 +191,8 @@ function initMap() {
         console.log(marker_coordinates);
       });
       marker.addListener("click", function () {
-        // displayInfoWindow(marker, place);
-        // console.log(">>>>inside marker", marker, "placeREsult", marker.content);
-        // let popupInfoWindow = new Popup{
-        //   marker.position,
-        // };
         displayPopup(marker, marker.placeResult);
       });
-      // marker.addListener("click", function () {
-      //   infoWindow.open(map, marker);
-      // });
       location_info.push({
         index: [{ lat: marker.lat }, { lng: marker.lng }],
       });
@@ -288,10 +259,17 @@ function initMap() {
   }
 
   function createPopupContent(marker, place) {
+    country_name = place.plus_code["compound_code"].split(", ").pop();
+    console.log(
+      "place test",
+      country_name
+      // place.plus_code["compound_code"].split(", ").pop()
+    );
     let container = document.createElement("div");
     let button = document.createElement("button");
     button.innerText = "Save";
     button.className = "filterSaveButton";
+
     button.addEventListener("click", () => {
       let info = getLocationInfo(place);
       handleSave(info);
