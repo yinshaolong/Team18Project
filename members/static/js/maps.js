@@ -9,7 +9,9 @@ function handleSave(itenarary_item) {
   const div = document.createElement("div");
   const p = document.createElement("p");
   for (let key in itenarary_item) {
-    p.innerHTML += `<strong><u>${key}</u></strong>: ${itenarary_item[key]} <br>`;
+    var modKey = key.toUpperCase();
+    modKey = modKey.replace(/_/g, " ");
+    p.innerHTML += `<strong><u>${modKey}</u></strong>: ${itenarary_item[key]} <br>`;
   }
   div.appendChild(p);
   div.className = "itenarary_item";
@@ -18,7 +20,6 @@ function handleSave(itenarary_item) {
 
 function getLocationInfo(location) {
   let locationTypes = [];
-  // console.log(locationInformation);
   for (let type of location.types) {
     if (
       type === "restaurant" ||
@@ -32,7 +33,9 @@ function getLocationInfo(location) {
     locationTypes.push(location.types[0]);
   }
 
+  console.log(location);
   return {
+    address: location.vicinity ? location.vicinity : location.formatted_address,
     address: location.vicinity ? location.vicinity : location.formatted_address,
     name: location.name,
     total_num_ratings: location.user_ratings_total,
@@ -143,6 +146,9 @@ function initMap() {
   clear.addEventListener("click", () => {
     input.value = "";
   });
+  clear.addEventListener("click", () => {
+    input.value = "";
+  });
   //makes sure that the search is only limited to the bounds of the map box
   map.addListener("bounds_changed", function () {
     searchBox.setBounds(map.getBounds());
@@ -193,11 +199,14 @@ function initMap() {
       marker.addListener("click", function () {
         displayPopup(marker, marker.placeResult);
       });
+      // marker.addListener("click", function () {
+      //   infoWindow.open(map, marker);
+      // });
       location_info.push({
         index: [{ lat: marker.lat }, { lng: marker.lng }],
       });
-      // index += 1;
-      console.log("marker bounds test", location_info);
+      index += 1;
+      console.log(location_info);
     });
     map.fitBounds(bounds);
   });
@@ -300,8 +309,7 @@ function initMap() {
   let hotelsButton = document.getElementById("hotels");
   let touristAttractionsButton = document.getElementById("tourist_attractions");
   restaurantButton.addEventListener("click", () => filter(RESTAURANTS));
-
-  hotelsButton.addEventListener("click", () => filter(HOTELS)); //>>>>
+  hotelsButton.addEventListener("click", () => filter(HOTELS)); //
   touristAttractionsButton.addEventListener("click", () =>
     filter(TOURIST_ATTRACTIONS)
   );
@@ -315,7 +323,7 @@ function displayInfoWindow() {
   infoWindow.open(map, marker);
 }
 
-// credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
+//credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
 function clearResults() {
   const results = document.getElementById("results");
 
