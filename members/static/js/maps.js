@@ -36,7 +36,6 @@ function getLocationInfo(location) {
   console.log(location);
   return {
     address: location.vicinity ? location.vicinity : location.formatted_address,
-    address: location.vicinity ? location.vicinity : location.formatted_address,
     name: location.name,
     total_num_ratings: location.user_ratings_total,
     rating: location.rating,
@@ -134,6 +133,7 @@ function initMap() {
       }
     }
   }
+  //end credit
 
   const map = new google.maps.Map(document.getElementById("map"), options);
   places = new google.maps.places.PlacesService(map);
@@ -199,9 +199,6 @@ function initMap() {
       marker.addListener("click", function () {
         displayPopup(marker, marker.placeResult);
       });
-      // marker.addListener("click", function () {
-      //   infoWindow.open(map, marker);
-      // });
       location_info.push({
         index: [{ lat: marker.lat }, { lng: marker.lng }],
       });
@@ -210,7 +207,6 @@ function initMap() {
     });
     map.fitBounds(bounds);
   });
-  //credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
   function dropMarker(i) {
     return function () {
       markers[i].setMap(map);
@@ -227,6 +223,7 @@ function initMap() {
     markers = [];
   }
 
+  //credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
   function filter(type) {
     const search = {
       bounds: map.getBounds(),
@@ -250,7 +247,7 @@ function initMap() {
           // If the user clicks a hotel marker, show the details of that hotel
           // in an info window.
           markers[i].placeResult = results[i];
-          // google.maps.event.addListener(markers[i], "click", displayInfoWindow);
+          //end credit
           google.maps.event.addListener(markers[i], "click", function (event) {
             marker_coordinates.push(event.latLng.lat());
             marker_coordinates.push(event.latLng.lng());
@@ -315,15 +312,7 @@ function initMap() {
   );
   //>>>
 }
-function displayInfoWindow() {
-  let marker = this;
-  let infoWindow = new google.maps.InfoWindow({
-    content: ` ${marker.placeResult.name} <br> average rating: ${marker.placeResult.rating} <br> total number of user ratings:  ${marker.placeResult.user_ratings_total} <br> ${marker.placeResult.vicinity} `,
-  });
-  infoWindow.open(map, marker);
-}
 
-//credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
 function clearResults() {
   const results = document.getElementById("results");
 
@@ -331,6 +320,7 @@ function clearResults() {
     results.removeChild(results.childNodes[0]);
   }
 }
+//credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
 
 function addResult(result, i) {
   const results = document.getElementById("results");
@@ -361,6 +351,7 @@ function addResult(result, i) {
   tr.appendChild(button);
   button.addEventListener("click", () => handleSave(itenarary_item));
 }
+//end credit
 
 window.initMap = initMap;
 
