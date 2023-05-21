@@ -1,5 +1,7 @@
 import { RESTAURANTS, TOURIST_ATTRACTIONS, HOTELS } from "./placeTypes.js";
 let map, popup, Popup;
+let marker_coordinates = [];
+let country_name;
 
 function handleSave(itenarary_item) {
   itenarary_saves.push(itenarary_item);
@@ -18,7 +20,6 @@ function handleSave(itenarary_item) {
 
 function getLocationInfo(location) {
   let locationTypes = [];
-  // console.log(locationInformation);
   for (let type of location.types) {
     if (
       type === "restaurant" ||
@@ -35,6 +36,7 @@ function getLocationInfo(location) {
   console.log(location);
   return {
     address: location.vicinity ? location.vicinity : location.formatted_address,
+    address: location.vicinity ? location.vicinity : location.formatted_address,
     name: location.name,
     total_num_ratings: location.user_ratings_total,
     rating: location.rating,
@@ -45,9 +47,6 @@ function getLocationInfo(location) {
 console.log(RESTAURANTS);
 let itenarary_saves = [];
 let places;
-//>>>>
-// let infoWindow;
-// let autocomplete;
 let markers = [];
 const MARKER_PATH =
   "https://developers.google.com/maps/documentation/javascript/images/marker_green";
@@ -95,10 +94,12 @@ function initMap() {
 
       bubbleAnchor.classList.add("popup-bubble-anchor");
       bubbleAnchor.appendChild(content);
+
       // This zero-height div is positioned at the bottom of the tip.
       this.containerDiv = document.createElement("div");
       this.containerDiv.classList.add("popup-container");
       this.containerDiv.appendChild(bubbleAnchor);
+
       // Optionally stop clicks, etc., from bubbling up to the map.
       Popup.preventMapHitsAndGesturesFrom(this.containerDiv);
     }
@@ -134,15 +135,6 @@ function initMap() {
     }
   }
 
-  // let popupContent = document.createElement("div");
-  // let searchSaveButton;
-  // popupcContent.innerHTML = "";
-  // popup = new Popup(
-  //   new google.maps.LatLng(-33.866, 151.196),
-  //   document.getElementById("content")
-  // );
-  // popup.setMap(map);
-
   const map = new google.maps.Map(document.getElementById("map"), options);
   places = new google.maps.places.PlacesService(map);
   let location_info = [];
@@ -151,6 +143,9 @@ function initMap() {
   let input = document.getElementById("search");
   let clear = document.getElementById("clear-button");
   let searchBox = new google.maps.places.SearchBox(input);
+  clear.addEventListener("click", () => {
+    input.value = "";
+  });
   clear.addEventListener("click", () => {
     input.value = "";
   });
@@ -195,24 +190,13 @@ function initMap() {
         bounds.extend(place.geometry.location);
       }
     });
-    //>>>>>
-
-    // markers[i].placeResult = results[i];
-    // google.maps.event.addListener(markers[i], "click", showInfoWindow);
-    // google.maps.event.addListener(marker, "click", () =>
-    //   displayInfoWindow(marker, place)
-    // );
-
     markers.forEach((marker) => {
-      // let infoWindow = new google.maps.InfoWindow({
-      //   content: marker.content,
-      // });
+      google.maps.event.addListener(marker, "click", function (event) {
+        marker_coordinates.push(event.latLng.lat());
+        marker_coordinates.push(event.latLng.lng());
+        console.log(marker_coordinates);
+      });
       marker.addListener("click", function () {
-        // displayInfoWindow(marker, place);
-        // console.log(">>>>inside marker", marker, "placeREsult", marker.content);
-        // let popupInfoWindow = new Popup{
-        //   marker.position,
-        // };
         displayPopup(marker, marker.placeResult);
       });
       // marker.addListener("click", function () {
@@ -221,8 +205,8 @@ function initMap() {
       location_info.push({
         index: [{ lat: marker.lat }, { lng: marker.lng }],
       });
-      // index += 1;
-      console.log("marker bounds test", location_info);
+      index += 1;
+      console.log(location_info);
     });
     map.fitBounds(bounds);
   });
@@ -265,12 +249,16 @@ function initMap() {
           });
           // If the user clicks a hotel marker, show the details of that hotel
           // in an info window.
-          // @ts-ignore TODO refactor to avoid storing on marker
           markers[i].placeResult = results[i];
-          google.maps.event.addListener(markers[i], "click", displayInfoWindow);
-          // google.maps.event.addListener(markers[i], "click", () =>
-          //   displayPopup(markers[i], results[i])
-          // );
+          // google.maps.event.addListener(markers[i], "click", displayInfoWindow);
+          google.maps.event.addListener(markers[i], "click", function (event) {
+            marker_coordinates.push(event.latLng.lat());
+            marker_coordinates.push(event.latLng.lng());
+            console.log("filter marker coordinates: ", marker_coordinates);
+          });
+          google.maps.event.addListener(markers[i], "click", () =>
+            displayPopup(markers[i], results[i])
+          );
 
           setTimeout(dropMarker(i), i * 100);
           addResult(results[i], i);
@@ -280,17 +268,29 @@ function initMap() {
   }
 
   function createPopupContent(marker, place) {
+    country_name = place.plus_code["compound_code"].split(", ").pop();
+    console.log(
+      "place test",
+      country_name
+      // place.plus_code["compound_code"].split(", ").pop()
+    );
     let container = document.createElement("div");
     let button = document.createElement("button");
     button.innerText = "Save";
     button.className = "filterSaveButton";
+
     button.addEventListener("click", () => {
       let info = getLocationInfo(place);
       handleSave(info);
     });
 
-    container.className = "popupContent";
-    container.innerHTML = `${marker.placeResult.name} <br> average rating: ${marker.placeResult.rating} <br> total number of user ratings:  ${marker.placeResult.user_ratings_total} <br> ${marker.placeResult.vicinity} `;
+    let { name, rating, user_ratings_total, vicinity, formatted_address } =
+      marker.placeResult;
+
+    container.className = "popup-content";
+    container.innerHTML = `${name} <br> average rating: ${rating} <br> total number of user ratings:  ${user_ratings_total} <br> ${
+      vicinity ? vicinity : formatted_address
+    } <br> `;
     container.appendChild(button);
     return container;
   }
@@ -298,7 +298,6 @@ function initMap() {
   function displayPopup(marker, place) {
     let content = createPopupContent(marker, place);
     console.log("marker position", marker.position.lat);
-    // let popup = new Popup(new google.maps.LatLng(49.2827, -123.1207), content);
     let popup = new Popup(marker.position, content);
     map.addListener("click", function () {
       popup.setMap(null);
@@ -314,6 +313,7 @@ function initMap() {
   touristAttractionsButton.addEventListener("click", () =>
     filter(TOURIST_ATTRACTIONS)
   );
+  //>>>
 }
 function displayInfoWindow() {
   let marker = this;
@@ -323,7 +323,7 @@ function displayInfoWindow() {
   infoWindow.open(map, marker);
 }
 
-// credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
+//credit: https://developers.google.com/maps/documentation/javascript/examples/places-autocomplete-hotelsearch
 function clearResults() {
   const results = document.getElementById("results");
 

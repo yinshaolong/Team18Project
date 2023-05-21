@@ -1,33 +1,8 @@
 {% extends 'registration/home.html' %}
 {% load static %}
-{% block extrahead%}
-<style>
-  .form-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    width: 50%;
-    margin: auto;
-    padding: 20px;
-    background-color: #f8f8f8;
-    border-radius: 10px;
-  }
-  
-  .form-container input, .form-container select, .form-container button {
-    margin-bottom: 5%;
-  }
 
-  .form-container button {
-    width: 100px;
-    align-self: center;
-  }
-</style>
-{% endblock %}
 {% block content %}
-
   <h2>Update Itinerary</h2>
-  <div class="form-container">
   <form method="post">
     {% csrf_token %}
     <label for="itinerary_name">Itinerary Name:</label>
@@ -42,5 +17,4 @@
 
     <button type="submit">Update</button>
   </form>
-</div>
 {% endblock %}
