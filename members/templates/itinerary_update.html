@@ -5,6 +5,7 @@
   <h2>Update Itinerary</h2>
   <form method="post">
     {% csrf_token %}
+    <div class="itinerary-fix">
     <label for="itinerary_name">Itinerary Name:</label>
     <input type="text" id="itinerary_name" name="itinerary_name" value="{{ itinerary.itinerary_name }}">
 
@@ -17,4 +18,5 @@
 
     <button type="submit">Update</button>
   </form>
+</div>
 {% endblock %}
