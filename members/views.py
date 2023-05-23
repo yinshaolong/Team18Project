@@ -10,6 +10,9 @@ from .models import User, Business, Itinerary
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
+import requests
+from countryinfo import CountryInfo
+from .static.cc import currencyConversion
 # from django.contrib.auth.models import User
 # from django.template import loader
 # from django.contrib.auth.decorators import login_required
@@ -47,11 +50,24 @@ def register_user(request):
 
 def home(request):
     if request.user.is_authenticated:
+        if request.method == 'POST':
+            source_country = request.POST.get('source_country')
+            target_country = request.POST.get('target_country')
+            amount = float(request.POST.get('amount'))
+            response = requests.get("https://api.freecurrencyapi.com/v1/latest?apikey=CgEOWBd1EiC5ux0RqxXDRml6xpKh31hCYJliaZzD&currencies=EUR%2CUSD%2CJPY%2CBGN%2CCZK%2CDKK%2CGBP%2CHUF%2CPLN%2CRON%2CSEK%2CCHF%2CISK%2CNOK%2CHRK%2CRUB%2CTRY%2CAUD%2CBRL%2CCAD%2CCNY%2CHKD%2CIDR%2CILS%2CINR%2CKRW%2CMXN%2CMYR%2CNZD%2CPHP%2CSGD%2CTHB%2CZAR&base_currency=CAD")
+            currencydata = (response.json())['data']
+            converted_amount = currencyConversion(source_country, target_country, amount, currencydata)
+            context = {'key': GOOGLE_API_KEY,
+                'source_country': source_country,
+                'target_country': target_country,
+                'amount': amount,
+                'converted_amount': converted_amount
+            }
+            return render(request, 'registration/home.html', context)
         context = {'key': GOOGLE_API_KEY}
         return render(request, 'registration/home.html', context)
     else:
         return redirect('login')
-        
 # def login_user(request):
 #     if request.user.is_authenticated:
 #         return redirect('home')
