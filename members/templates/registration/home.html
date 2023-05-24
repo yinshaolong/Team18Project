@@ -45,7 +45,7 @@
 			</table>
 		  </div>
 		  <div id="map"></div>
-		  <div id="weather" style='grid-row: 3/4; grid-column: 1/3; padding: 10px;'>
+		  <div id="weather" style='grid-row: 3/4; grid-column: 1/3; padding: 10px; display: flex;'>
 			  <div id="currencydisplay">
 				  <h3>Currency Conversion</h3>
 				  <form method="post">
@@ -71,7 +71,8 @@
 				  <p><strong> Conversion Result: </strong> {{ amount }} in {{ source_country }} is equal to {{ converted_amount }} in {{ target_country }}</p>
 				  {% endif %}
 				  
-				  </div>
+				</div>
+			<div id="weatherdiv"></div>
 		  </div>
   
 		<div id="temp"></div>

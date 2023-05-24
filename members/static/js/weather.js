@@ -2,7 +2,7 @@ const APIKEY = "d0b6c9ade1db30fe160940ff847a63cb"
 const weatherButton = document.getElementById("clear-button")
 import { marker_coordinates } from "./maps";
 
-console.log("testHelo")
+console.log("testHelo");
 
 function getWeatherForLocation(coordinates) {
     fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates[0]}&lon=${coordinates[1]}&appid=${APIKEY}`)
