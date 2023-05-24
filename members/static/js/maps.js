@@ -464,8 +464,11 @@ function getWeatherForLocation(coordinates) {
         const dayImage = document.createElement("img");
         dayImage.src = `https://openweathermap.org/img/wn/${dayWeatherIcon}.png`;
         dayImage.classList.add("weather-icon");
+        let contentWrapper = document.createElement("span");
         let content = document.createTextNode(day.weekday + "\n" + day.data[0] + "\n" + day.data[1]);
-        dailyDiv.appendChild(content);
+        contentWrapper.style = "padding: 10px;"
+        contentWrapper.appendChild(content);
+        dailyDiv.appendChild(contentWrapper);
         dailyDiv.append(dayImage);
         weather.appendChild(dailyDiv);
       }
