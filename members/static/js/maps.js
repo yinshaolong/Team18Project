@@ -451,15 +451,22 @@ function getWeatherForLocation(coordinates) {
 
       const weather = document.getElementById("weatherdiv");
 
+
       while (weather.lastChild) {
         weather.removeChild(weather.lastChild);
       } 
 
       for (let day of weekWeather) {
+        console.log(day);
         let dailyDiv = document.createElement("div");
-        let content = document.createTextNode(day.weekday + ": " + day.data[0] + ", " + day.data[1]);
+        let dayWeatherIcon = day.data[2];
         dailyDiv.id = "weather-daily";
+        const dayImage = document.createElement("img");
+        dayImage.src = `https://openweathermap.org/img/wn/${dayWeatherIcon}.png`;
+        dayImage.classList.add("weather-icon");
+        let content = document.createTextNode(day.weekday + "\n" + day.data[0] + "\n" + day.data[1]);
         dailyDiv.appendChild(content);
+        dailyDiv.append(dayImage);
         weather.appendChild(dailyDiv);
       }
     })
