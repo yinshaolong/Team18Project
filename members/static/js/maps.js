@@ -400,3 +400,5 @@ const googleMapsScript = document.createElement("script");
 googleMapsScript.src =
   "https://maps.googleapis.com/maps/api/js?language=en&key=AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM&libraries=places&callback=initMap&libraries=places&v=weekly";
 document.body.appendChild(googleMapsScript);
+
+export { marker_coordinates }
