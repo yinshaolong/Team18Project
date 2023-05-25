@@ -1,4 +1,4 @@
-import { RESTAURANTS, TOURIST_ATTRACTIONS, HOTELS } from "./placeTypes.js";
+import { RESTAURANTS, TOURIST_ATTRACTIONS, HOTELS, COUNTRYCODE } from "./placeTypes.js";
 let map, popup, Popup;
 let marker_coordinates = [];
 let country_name;
@@ -393,6 +393,57 @@ window.addEventListener("click", function (event) {
         openDropDown.classList.remove("display");
       }
     }
+  }
+});
+const currencyDisplay = document.getElementById("currencydisplay");
+const currencyConvertButton = document.getElementById("converterbutton");
+
+function getKeyByValue(object, value) {
+  return Object.keys(object).find(key => object[key] === value);
+}
+
+currencyConvertButton.addEventListener("click", function (event){
+  let sourceCountryCur = document.getElementById("source_country").value;
+  let targetCountryCur = document.getElementById("target_country").value;
+  let currencyAmount = document.getElementById("amount").value;
+  if (!sourceCountryCur || !targetCountryCur || !currencyAmount ){
+    alert("Must have values to convert currency. Please try again.")
+  } else {
+    console.log(sourceCountryCur, targetCountryCur, currencyAmount)
+    fetch("https://api.freecurrencyapi.com/v1/latest?apikey=CgEOWBd1EiC5ux0RqxXDRml6xpKh31hCYJliaZzD&currencies=EUR%2CUSD%2CJPY%2CBGN%2CCZK%2CDKK%2CGBP%2CHUF%2CPLN%2CRON%2CSEK%2CCHF%2CISK%2CNOK%2CHRK%2CRUB%2CTRY%2CAUD%2CBRL%2CCAD%2CCNY%2CHKD%2CIDR%2CILS%2CINR%2CKRW%2CMXN%2CMYR%2CNZD%2CPHP%2CSGD%2CTHB%2CZAR&base_currency=CAD")
+    .then(function(response){
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error("Failed to fetch currency data.");
+      }
+    })
+    .then(function(data){
+      console.log(data)
+      const exchangeRates = data.data;
+      let sourceCountry = getKeyByValue(COUNTRYCODE, sourceCountryCur);
+      let targetCountry = getKeyByValue(COUNTRYCODE, targetCountryCur);
+      console.log(sourceCountry, targetCountry)
+      console.log(exchangeRates)
+      const sourceRate = exchangeRates[sourceCountry];
+      const targetRate = exchangeRates[targetCountry];
+        if (sourceRate && targetRate) {
+          const convertedAmount = ((currencyAmount / sourceRate) * targetRate).toFixed(2);
+          console.log(convertedAmount);
+          var pConvertedAmount = document.getElementById("TotalOfConversion")
+          if (!pConvertedAmount) {
+            const pOfAmount = document.createElement("p");
+            pOfAmount.setAttribute("id", "TotalOfConversion")
+            const node = document.createTextNode(`Converted amount: ${convertedAmount}`);
+            pOfAmount.appendChild(node);
+            currencyDisplay.appendChild(pOfAmount);
+          } else {
+            pConvertedAmount.innerHTML = `Converted amount: ${convertedAmount}`
+          };
+        } else {
+          throw new Error("Invalid source or target currency.");
+        }
+    })
   }
 });
 
