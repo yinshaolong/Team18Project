@@ -330,3 +330,33 @@ header {
 	margin-right: 0px;
   }
   
+  #weatherdiv {
+	display: flex;
+	flex-direction: row;
+  }
+
+  #weather-daily {
+	display: flex;
+	flex-direction: column; 
+	background-color: #f5f5f5;
+	padding: 10px;
+	margin: 5px;
+	border-radius: 5px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	font-family: 'Roboto', sans-serif;
+	font-size: 20px;
+	font-weight: bolder;
+	color: #333; 
+	width: 70%; 
+	align-items: center;
+	margin-bottom: 10px;
+	justify-content: center;
+  }
+
+  .weather-icon {
+	background-color: #888; /* Adjust the color as needed */
+	padding: 2px;
+	margin-bottom: 5px;
+	border-radius: 10px;
+  }
+  

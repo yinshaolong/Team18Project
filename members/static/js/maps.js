@@ -273,8 +273,14 @@ function initMap() {
     );
     let container = document.createElement("div");
     let button = document.createElement("button");
+    let weatherButton = document.createElement("button");
+    weatherButton.innerText = "Weather";
     button.innerText = "Save";
     button.className = "filterSaveButton";
+
+    weatherButton.addEventListener("click", () => {
+      getWeatherForLocation(marker_coordinates.splice(-2))
+    });
 
     button.addEventListener("click", () => {
       let info = getLocationInfo(place);
@@ -289,6 +295,7 @@ function initMap() {
       vicinity ? vicinity : formatted_address
     } <br> `;
     container.appendChild(button);
+    container.appendChild(weatherButton);
     return container;
   }
 
@@ -451,3 +458,73 @@ const googleMapsScript = document.createElement("script");
 googleMapsScript.src =
   "https://maps.googleapis.com/maps/api/js?language=en&key=AIzaSyCEE6-JSPCe6zNZuAoIPog0ELD2-UyO3CM&libraries=places&callback=initMap&libraries=places&v=weekly";
 document.body.appendChild(googleMapsScript);
+
+const APIKEY = "d0b6c9ade1db30fe160940ff847a63cb"
+const weatherButton = document.getElementById("clear-button");
+// import { marker_coordinates } from "./maps";
+
+console.log("testHelo");
+
+function getWeatherForLocation(coordinates) {
+  fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${coordinates[0]}&lon=${coordinates[1]}&appid=${APIKEY}`)
+    .then(response => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+    })
+    .then(data => {
+      const week = {
+        0: "Sunday",
+        1: "Monday",
+        2: "Tuesday",
+        3: "Wednesday",
+        4: "Thursday",
+        5: "Friday",
+        6: "Saturday",
+        7: "Sunday"
+      };
+
+      let dailyWeather = data.daily;
+      let weekWeather = [];
+
+      for (let index = 0; index < dailyWeather.length; index++) {
+        let temp = dailyWeather[index].temp["day"];
+        let weatherIcon = dailyWeather[index].weather[0]["icon"];
+        let day = {
+          "weekday": week[index],
+          "data": [`${(temp - 273.15).toFixed(2)}°C`, dailyWeather[index].weather[0]["main"], weatherIcon]
+        };
+        weekWeather.push(day);
+        console.log(day);
+      }
+
+      const weather = document.getElementById("weatherdiv");
+
+
+      while (weather.lastChild) {
+        weather.removeChild(weather.lastChild);
+      } 
+
+      for (let day of weekWeather) {
+        console.log(day);
+        let dailyDiv = document.createElement("div");
+        let dayWeatherIcon = day.data[2];
+        dailyDiv.id = "weather-daily";
+        const dayImage = document.createElement("img");
+        dayImage.src = `https://openweathermap.org/img/wn/${dayWeatherIcon}.png`;
+        dayImage.classList.add("weather-icon");
+        let contentWrapper = document.createElement("span");
+        let content = document.createTextNode(day.weekday + "\n" + day.data[0] + "\n" + day.data[1]);
+        contentWrapper.style = "padding: 10px;"
+        contentWrapper.appendChild(content);
+        dailyDiv.appendChild(contentWrapper);
+        dailyDiv.append(dayImage);
+        weather.appendChild(dailyDiv);
+      }
+    })
+    .catch(error => {
+      console.error(error);
+    });
+}

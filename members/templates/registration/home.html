@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="{% static 'homestylesheet.css' %}">
 {% endblock %}
 <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+<script src="{% static 'js/weather.js' %}" defer type="module"></script>
 <script src="{% static 'js/maps.js' %}" defer type="module"></script>
 <script src="{% static 'js/placeTypes.js' %}" defer type="module"></script>
 <script async defer
@@ -44,7 +45,35 @@
 			</table>
 		  </div>
 		  <div id="map"></div>
-		  <div id="weather" style='grid-row: 3/4; grid-column: 1/3; padding: 10px;'>
+
+		  <div id="weather" style='grid-row: 3/4; grid-column: 1/3; padding: 10px; display: flex;'>
+			  <div id="currencydisplay">
+				  <h3>Currency Conversion</h3>
+				  <form method="post">
+					  {% csrf_token %}
+					  <label for="source_country">Source Country:</label>
+					  <input type="text" id="source_country" name="source_country" required><br><br>
+					  <label for="target_country">Target Country:</label>
+					  <input type="text" id="target_country" name="target_country" required><br><br>
+					  <label for="amount">Amount:</label>
+					  <input type="number" id="amount" name="amount" required><br><br>
+					  <input type="submit" value="Convert" id = 'converterbutton' style='    background-color: #e8ba5c;
+					  color: #fff;
+					  border: none;
+					  padding: 8px 16px;
+					  border-radius: 10px;
+					  cursor: pointer;
+					  margin-left: 8px;
+					  font-size: larger;'>
+				  </form>
+				  
+				  {% if converted_amount %}
+				  
+				  <p><strong> Conversion Result: </strong> {{ amount }} in {{ source_country }} is equal to {{ converted_amount }} in {{ target_country }}</p>
+				  {% endif %}
+				  
+				</div>
+			<div id="weatherdiv"></div>
 
 		  </div>
   
