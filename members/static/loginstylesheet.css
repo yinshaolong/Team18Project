@@ -105,7 +105,7 @@ nav li a:hover {
   align-items: center;
   /* margin-top: 4%;
   margin-bottom: 4%; */
-  margin: 5%;
+  margin: 10%;
 }
 
 .login-box {
@@ -156,6 +156,8 @@ input {
   height: 40px;
   padding: 5px;
   font-size:larger;
+  width: auto;
+  margin:5%
 }
 
 button{
