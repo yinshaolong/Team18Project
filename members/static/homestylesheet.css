@@ -146,6 +146,7 @@ body {
 	grid-row: 1;
 	background-color: #E7C176;
 	overflow-y: auto;
+	padding-left:2%;
 	/* add a scrollbar if the content overflows */
 }
 
@@ -360,3 +361,49 @@ header {
 	border-radius: 10px;
   }
   
+#list {
+	text-align: left;
+}
+.update-itinerary {
+	margin-left: 10px;
+	background-color: blue; 
+	color: white; 
+	border: none; 
+	border-radius: 20px; 
+	padding: 10px 20px; 
+	text-align: center; 
+	text-decoration: none; 
+} 
+.delete-itinerary { 
+	margin: 10px; 
+	background-color: red; 
+	color: white; 
+	border: none; 
+	border-radius: 20px; 
+	padding: 10px 20px;
+	text-align: center;
+	text-decoration: none; 
+} 
+#update-display { 
+	display: flex;
+	flex-direction: column;
+	padding: 5% 20% 5%;
+	height:auto
+}
+#businesses{
+	height: 50vh;
+}
+#save-button{
+	border: 1px solid;
+	margin: 10px; 
+	background-color: darkgreen; 
+	color: white; 
+	border: none; 
+	border-radius: 20px; 
+	padding: 10px 20px; 
+	text-align: center; 
+	text-decoration: none;
+}
+#currencydisplay{
+	margin-right: 1%;
+}

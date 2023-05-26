@@ -35,9 +35,9 @@ function getLocationInfo(location) {
 
   console.log(location);
   return {
-    address: location.vicinity ? location.vicinity : location.formatted_address,
     name: location.name,
-    total_num_ratings: location.user_ratings_total,
+    address: location.vicinity ? location.vicinity : location.formatted_address,
+    reviews: location.user_ratings_total,
     rating: location.rating,
     type: locationTypes,
   };
@@ -291,7 +291,7 @@ function initMap() {
       marker.placeResult;
 
     container.className = "popup-content";
-    container.innerHTML = `${name} <br> average rating: ${rating} <br> total number of user ratings:  ${user_ratings_total} <br> ${
+    container.innerHTML = `${name} <br> Average Rating: ${rating} <br> Total Number of User Ratings:  ${user_ratings_total} <br> ${
       vicinity ? vicinity : formatted_address
     } <br> `;
     container.appendChild(button);
