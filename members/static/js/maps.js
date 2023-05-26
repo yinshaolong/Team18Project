@@ -374,6 +374,7 @@ function saveBusinesses() {
   })
     .then((response) => response.json())
     .then((result) => {
+      alert("Itinerary saved successfully!")
       // Handle the response from the Django backend
       console.log(result);
       itenarary_saves = []; // Clear the array

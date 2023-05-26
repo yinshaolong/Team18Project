@@ -4,11 +4,7 @@
 
 {% block content %}
 	{% if messages %}
-	  <div class="messages">
-	    {% for message in messages %}
-	      <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
-	    {% endfor %}
-	  </div>
+
 	{% endif %}
 
 	<div class="login-container">
@@ -24,11 +20,16 @@
 		  <h2>Login</h2>
 		  <form method="post">
 			{% csrf_token %}
-			{{ form.as_p }}
+			{{ form }}
 			<div class="button-container">
 			  <button type="submit">Login</button>
 			</div>
 		  </form>
 		</div>
+	  </div>
+	  <div class="messages">
+	    {% for message in messages %}
+	      <div style='text-align:center;'{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+	    {% endfor %}
 	  </div>
 {% endblock content %}
