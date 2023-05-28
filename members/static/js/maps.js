@@ -2,6 +2,7 @@ import { RESTAURANTS, TOURIST_ATTRACTIONS, HOTELS, COUNTRYCODE } from "./placeTy
 let map, popup, Popup;
 let marker_coordinates = [];
 let country_name;
+let index;
 
 function handleSave(itenarary_item) {
   itenarary_saves.push(itenarary_item);
