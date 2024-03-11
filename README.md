@@ -3,7 +3,7 @@
 ### `python -m venv venv`
 Starts the virtual environment.\
 Open http://127.0.0.1:8000 to view in browser.
-### `.\venv\Scripts\activate`
+### `./venv/Scripts/activate`
 Initializes the virtual environment.
 ### `pip install -r requirements.txt` 
 Installs required APIs and libraries.
