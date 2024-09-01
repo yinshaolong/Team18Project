@@ -1,3 +1,66 @@
 vscode
 marker.jpg
 venv
+<input type="text" id="search-bar" placeholder="Search location">
+<div id="map"></div>
+
+<script>
+	function initMap() {
+		var map = new google.maps.Map(document.getElementById('map'), {
+			center: {lat: -34.397, lng: 150.644},
+			zoom: 8
+		});
+
+		var searchBar = document.getElementById('search-bar');
+		searchBar.addEventListener('change', function() {
+			var address = searchBar.value;
+			console.log('Searching for address:', address); // Debugging log
+			geocodeAddress(address, map);
+		});
+	}
+
+	function geocodeAddress(address, map) {
+		var geocoder = new google.maps.Geocoder();
+		geocoder.geocode({'address': address}, function(results, status) {
+			if (status === 'OK') {
+				console.log('Geocode successful:', results[0].geometry.location); // Debugging log
+				map.setCenter(results[0].geometry.location);
+			} else {
+				console.error('Geocode was not successful for the following reason:', status); // Debugging log
+				alert('Geocode was not successful for the following reason: ' + status);
+			}
+		});
+	}
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script><input type="text" id="search-bar" placeholder="Search location">
+<div id="map"></div>
+
+<script>
+    function initMap() {
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: -34.397, lng: 150.644},
+            zoom: 8
+        });
+
+        var searchBar = document.getElementById('search-bar');
+        searchBar.addEventListener('change', function() {
+            var address = searchBar.value;
+            console.log('Searching for address:', address); // Debugging log
+            geocodeAddress(address, map);
+        });
+    }
+
+    function geocodeAddress(address, map) {
+        var geocoder = new google.maps.Geocoder();
+        geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+                console.log('Geocode successful:', results[0].geometry.location); // Debugging log
+                map.setCenter(results[0].geometry.location);
+            } else {
+                console.error('Geocode was not successful for the following reason:', status); // Debugging log
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+        });
+    }
+</script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"></script>

@@ -28,7 +28,7 @@
 <div class="container">
 	<div class="container-map">
 		<div class="search-container">
-			<input class="form-control" id="search" type="text" placeholder="Search..." />
+			<input class="form-control" id="search-bar" type="text" placeholder="Search..." />
 			<button id="clear-button">Clear</button>
 			<div class="filterContainer">
 				<button id="select-button">Filter</button>
@@ -45,10 +45,9 @@
 			</table>
 		  </div>
 		  <div id="map"></div>
-
-		  
-		 
-		<div id="temp"></div>
+		  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places&callback=initMap" async defer></script>
+		  <script src="static/js/maps.js"></script>
+		  <div id="temp"></div>
 	</div>
 	
 	<div class="textbox">

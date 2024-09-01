@@ -2,6 +2,31 @@
 {% load static %}
 {% block title %} <title> WanderWhiz Sign Up </title> {% endblock %}
 {% block content %}
+<!-- 
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var signUpButton = document.querySelector(".button-container button[type='submit']");
+        var errorMessage = document.querySelector(".error");
+
+        if (signUpButton) {
+            signUpButton.addEventListener("click", function(event) {
+                console.log("Sign-up button clicked"); // Debugging log
+                event.preventDefault(); // Prevent form submission for debugging
+
+                if (errorMessage && errorMessage.textContent.trim() !== "") {
+                    console.log("Error message found, hiding it"); // Debugging log
+                    errorMessage.classList.add("hidden-important");
+                    errorMessage.classList.remove("error");
+                } else if (errorMessage) {
+                    console.log("No error message found, removing error class"); // Debugging log
+                    errorMessage.classList.remove("error");
+                }
+            });
+        } else {
+            console.log("Sign-up button not found"); // Debugging log
+        }
+    });
+</script> -->
 	<!-- <form method="post">
 		{% csrf_token %}
 		{{ form.as_p }}
@@ -18,6 +43,7 @@
 			/>
 		  </div>
 		  <h2>Sign Up</h2>
+		  <h3 class="error">Note : Please ensure that the password contains atleast: 2 letter and 2 numbers and 8 characters.</h3>
 		  <form method="post">
 			{% csrf_token %}
 			{{ form.as_p }}
