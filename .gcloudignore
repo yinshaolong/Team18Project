@@ -1,0 +1,28 @@
+# .gcloudignore
+.gcloudignore
+
+# Ignore local .env file
+.env
+
+# If you would like to upload your .git directory, .gitignore file, or files
+# from your .gitignore file, remove the corresponding line
+# below:
+.git
+.gitignore
+
+# Python pycache:
+*.pyc
+*.pyo
+__pycache__/
+__pypackages__/
+
+
+# Ignored by the build system
+/setup.cfg
+
+# virtualenv
+venv/
+
+# Ignore IDE files
+.vscode/
+.idea/

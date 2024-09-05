@@ -1,0 +1,26 @@
+# app.yaml
+
+runtime: python310
+env: standard
+entrypoint: gunicorn -b :$PORT project.wsgi:application
+
+# This handler routes all requests not caught above to your main app. It is
+# required when static routes are defined, but can be omitted (along with
+# the entire handlers section) when there are no static files defined.
+handlers:
+# This configures Google App Engine to serve the files in the app's members/static/ directory.
+- url: /static
+  static_dir: members/static
+- url: /.*
+  script: auto
+  secure: always
+
+env_variables:
+  DJANGO_SETTINGS_MODULE: "project.settings_prod"
+
+runtime_config:
+  python_version: 3
+
+automatic_scaling:
+  min_instances: 1
+  max_instances: 2
