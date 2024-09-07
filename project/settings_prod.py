@@ -26,7 +26,7 @@ SECRET_KEY = "django-insecure-sy+l9)5d=f9p6aw@(tc%076r)ex+x!cg8t**4$o&uh+n*^r!n3
 # SECURITY WARNING: don't run with debug turned on in production!
 # Change this to "False" when you are ready for production
 DEBUG = False
-ALLOWED_HOSTS = ["ankiyang1201.appspot.com"]
+ALLOWED_HOSTS = ["wanderwhiz-itinerary.uw.r.appspot.com", "wanderwhiz-itinerary.appspot.com"]
 
 # Application definition
 
