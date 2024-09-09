@@ -3,10 +3,7 @@ let map, popup, Popup;
 let marker_coordinates = [];
 let country_name;
 let index;
-const os = require('os');
 
-const STATIC_URL = '/static/';
-const STATIC_ROOT = os.homedir(); 
 
 function handleSave(itenarary_item) {
   itenarary_saves.push(itenarary_item);
