@@ -16,7 +16,7 @@ handlers:
   secure: always
 
 env_variables:
-  DJANGO_SETTINGS_MODULE: "project.settings_prod"
+  DJANGO_SETTINGS_MODULE: "project.settings"
 
 runtime_config:
   python_version: 3

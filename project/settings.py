@@ -9,24 +9,59 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import io
 import os
-from pathlib import Path
+from urllib.parse import urlparse
+
+import environ
+from google.cloud import secretmanager
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+env = environ.Env(DEBUG=(bool, False))
+env_file = os.path.join(BASE_DIR, ".env")
+
+if os.path.isfile(env_file):
+    # Use a local secret file, if provided
+    env.read_env(env_file)
+elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
+    # Pull secrets from Secret Manager
+    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
+
+    client = secretmanager.SecretManagerServiceClient()
+    settings_name = os.environ.get("SETTINGS_NAME", "django_settings")
+    name = f"projects/{project_id}/secrets/{settings_name}/versions/latest"
+    payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
+
+    env.read_env(io.StringIO(payload))
+else:
+    raise Exception("No local .env or GOOGLE_CLOUD_PROJECT detected. No secrets found.")
+
+SECRET_KEY = env("SECRET_KEY")
+GOOGLE_API_KEY = env("GOOGLE_API_KEY")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'members/static')
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-sy+l9)5d=f9p6aw@(tc%076r)ex+x!cg8t**4$o&uh+n*^r!n3"
-
 # SECURITY WARNING: don't run with debug turned on in production!
 # Change this to "False" when you are ready for production
 DEBUG = True
-ALLOWED_HOSTS = ["localhost", '127.0.0.2', '127.0.0.1']
+
+# SECURITY WARNING: It's recommended that you use this when
+# running in production. The URL will be known once you first deploy
+# to App Engine. This code takes the URL and converts it to both these settings formats.
+GAE_URL = env("APPENGINE_URL", default=None)
+if GAE_URL:
+    if not urlparse(GAE_URL).scheme:
+        GAE_URL = f"https://{GAE_URL}"
+    ALLOWED_HOSTS = [urlparse(GAE_URL).netloc]
+else:
+    ALLOWED_HOSTS = ["*"]
+
 
 # Application definition
 
@@ -121,4 +156,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = 'login/'
-GOOGLE_API_KEY = 'AIzaSyBKb_aJU0-cUwekYxUqx8-AizyV1jLoci0'
