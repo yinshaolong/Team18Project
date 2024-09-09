@@ -1,4 +1,19 @@
 {
+  "name": "wander-whiz",
+  "version": "1.0.0",
+  "private": true,
+  "homepage":  "https://wanderwhiz-itinerary.appspot.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yinshaolong/WanderWhiz/"
+  },
+  "license": "UNLICENSED",
+  "author": "yinshaolong",
+  "scripts": {
+    "venv": "source ./venv/Scripts/activate",
+    "dev": "GOOGLE_CLOUD_PROJECT=wanderwhiz-itinerary python3 ./manage.py runserver",
+    "deploy": "gcloud app deploy app.yaml --project=wanderwhiz-itinerary"
+  },
   "dependencies": {
     "countryinfo": "^1.0.5",
     "requests": "^0.3.0"
